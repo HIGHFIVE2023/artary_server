@@ -30,5 +30,5 @@ public class User {
     private String image;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Diary> diary = new ArrayList<>();
+    private List<Diary> diaries = new ArrayList<>();
 }

@@ -4,33 +4,26 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
-@Table(name = "diary")
-public class Diary {
+@Table(name = "sticker")
+public class Sticker {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "diary_id")
+    @Column(name = "sticker_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "diary_id")
+    private Diary diary;
 
-    @NotNull
-    private String title;
+    @Column(name = "sticker_name")
+    private String name;
 
-    @NotNull
-    @Column(columnDefinition = "TEXT")
-    private String content;
-
-    @NotNull
-    private String picture;
+    @Column(name = "img")
+    private String image;
 
     @Column(name = "created_at")
     @CreatedDate
@@ -39,7 +32,4 @@ public class Diary {
     @Column(name = "updated_at")
     @LastModifiedDate
     private LocalDateTime updateDate;
-
-    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Sticker> stickers = new ArrayList<>();
 }
