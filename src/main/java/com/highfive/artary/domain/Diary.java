@@ -20,6 +20,7 @@ public class Diary {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @NotNull
     private User user;
 
     @NotNull
@@ -34,6 +35,7 @@ public class Diary {
 
     @Column(name = "created_at")
     @CreatedDate
+    @NotNull
     private LocalDateTime createDate;
 
     @Column(name = "updated_at")

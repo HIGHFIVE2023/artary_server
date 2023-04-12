@@ -31,4 +31,7 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diary> diaries = new ArrayList<>();
+
+    @OneToOne(mappedBy = "user")
+    private Setting setting;
 }
