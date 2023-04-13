@@ -1,17 +1,17 @@
 package com.highfive.artary.domain;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
+import lombok.*;
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "diary")
-public class Diary {
+public class Diary extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,27 +20,21 @@ public class Diary {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @NotNull
+    @NonNull
     private User user;
 
-    @NotNull
+    @NonNull
     private String title;
 
-    @NotNull
+    @NonNull
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @NotNull
+    @NonNull
     private String picture;
 
-    @Column(name = "created_at")
-    @CreatedDate
-    @NotNull
-    private LocalDateTime createDate;
-
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private LocalDateTime updateDate;
+    @NonNull
+    private String emotion;
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Sticker> stickers = new ArrayList<>();

@@ -1,10 +1,8 @@
 package com.highfive.artary.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,25 +10,29 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "user")
-public class User {
+public class User extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
 
     @Column(name = "user_name")
-    @NotNull
+    @NonNull
     private String name;
 
-    @NotNull
+    @NonNull
     private String nickname;
 
-    @NotNull
+    @NonNull
     private String password;
 
-    @NotNull
+    @NonNull
+    @Email
+    @Column(unique = true)
     private String email;
 
     @Column(name = "profile_img")

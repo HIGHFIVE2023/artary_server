@@ -1,15 +1,18 @@
 package com.highfive.artary.domain;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+
+
 
 @Entity
+@NoArgsConstructor
+@Data
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "sticker")
-public class Sticker {
+public class Sticker extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,23 +21,15 @@ public class Sticker {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_id")
-    @NotNull
+    @NonNull
     private Diary diary;
 
     @Column(name = "sticker_name")
-    @NotNull
+    @NonNull
     private String name;
 
     @Column(name = "img")
-    @NotNull
+    @NonNull
     private String image;
 
-    @Column(name = "created_at")
-    @CreatedDate
-    @NotNull
-    private LocalDateTime createDate;
-
-    @Column(name = "updated_at")
-    @LastModifiedDate
-    private LocalDateTime updateDate;
 }
