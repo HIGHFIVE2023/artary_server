@@ -1,11 +1,18 @@
 package com.highfive.artary.domain;
 
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.validation.constraints.NotNull;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Table(name = "user")
 public class User {
 
@@ -32,6 +39,14 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diary> diaries = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Setting setting;
+
+    @Builder
+    public User(String name, String nickname, String password, String email) {
+        this.name = name;
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+    }
 }
