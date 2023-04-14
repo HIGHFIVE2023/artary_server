@@ -32,8 +32,8 @@ public class Friend {
 
     @NonNull
     @CreatedDate
-    @Column(updatable=false)
-    private LocalDateTime created_at;
+    @Column(updatable=false, name="created_at")
+    private LocalDateTime createdAt;
 
     @NonNull
     @Column(name="are_we_friend")
