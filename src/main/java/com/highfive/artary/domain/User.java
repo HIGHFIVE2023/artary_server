@@ -44,6 +44,9 @@ public class User extends BaseEntity {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Setting setting;
 
+    @OneToMany
+    private List<Friend> friends = new ArrayList<>();
+
     @Builder
     public User(String name, String nickname, String password, String email) {
         this.name = name;
