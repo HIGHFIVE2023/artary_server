@@ -3,6 +3,7 @@ package com.highfive.artary.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import org.hibernate.annotations.Check;
 import org.hibernate.annotations.OnDelete;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -13,7 +14,11 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name = "alarm")
+@Table(name = "alarm",
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"to_user_id", "from_user_id"})
+    })
+@Check(constraints = "to_user_id <> from_user_id")
 public class Alarm {
 
     @Id
@@ -21,14 +26,14 @@ public class Alarm {
     @Column(name = "alarm_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "to_user_id")
     @NonNull
     private User toUserId;
 
-    @NonNull
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="from_user_id")
+    @JoinColumn(name = "from_user_id")
+    @NonNull
     private User fromUserId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -38,12 +43,11 @@ public class Alarm {
 
     @NonNull
     @Column(name = "alarm_type")
-    private String alarmType;
+    private String type;
 
     @NonNull
     @Column(name = "alarm_content")
-    private String alarmContent;
-
+    private String content;
 
     @Column(updatable=false, name="created_at")
     private LocalDateTime createdAt;

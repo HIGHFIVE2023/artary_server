@@ -25,22 +25,22 @@ public class Friend {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "to_user_id")
     @NonNull
     private User toUserId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "from_user_id")
     @NonNull
-    @OneToOne
-    @JoinColumn(name="from_user_id")
     private User fromUserId;
 
-    @NonNull
     @CreatedDate
     @Column(updatable=false, name="created_at")
+    @NonNull
     private LocalDateTime createdAt;
 
-    @NonNull
     @Column(name="are_we_friend")
+    @NonNull
     private Boolean areWeFriend;
 }
