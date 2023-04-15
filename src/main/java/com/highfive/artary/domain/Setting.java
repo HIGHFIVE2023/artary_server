@@ -1,6 +1,7 @@
 package com.highfive.artary.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,4 +34,17 @@ public class Setting {
 
     @Column(name = "cover_img")
     private String coverImage;
+
+    @Builder
+    public Setting(User user, String backColor, String backImage, String coverColor, String coverImage) {
+        this.user = user;
+        this.backColor = backColor;
+        this.backImage = backImage;
+        this.coverColor = coverColor;
+        this.coverImage = coverImage;
+    }
+
 }
+
+
+
