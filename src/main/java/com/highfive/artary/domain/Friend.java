@@ -1,9 +1,6 @@
 package com.highfive.artary.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import org.hibernate.annotations.Check;
 import org.springframework.data.annotation.CreatedDate;
 
@@ -43,4 +40,11 @@ public class Friend {
     @Column(name="are_we_friend")
     @NonNull
     private Boolean areWeFriend;
+
+    @Builder
+    public Friend(User toUserId, User fromUserId, Boolean areWeFriend) {
+        this.toUserId = toUserId;
+        this.fromUserId = fromUserId;
+        this.areWeFriend = areWeFriend;
+    }
 }
