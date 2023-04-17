@@ -4,11 +4,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.hibernate.annotations.Check;
-import org.hibernate.annotations.OnDelete;
-import org.springframework.data.annotation.CreatedDate;
+
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 @Entity

@@ -18,7 +18,7 @@ public class Setting {
     @Column(name = "user_id")
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @MapsId
     @JoinColumn(name = "user_id")
     private User user;
