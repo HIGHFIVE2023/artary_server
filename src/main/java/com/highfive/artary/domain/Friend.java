@@ -18,15 +18,16 @@ import java.time.LocalDateTime;
 @Check(constraints = "to_user_id <> from_user_id")
 public class Friend {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @EmbeddedId
+    private FriendId id;
 
-    @OneToOne
+    @MapsId("toUserId")
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_user_id")
     @NonNull
     private User toUserId;
 
+    @MapsId("fromUserId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_user_id")
     @NonNull
@@ -42,7 +43,8 @@ public class Friend {
     private Boolean areWeFriend;
 
     @Builder
-    public Friend(User toUserId, User fromUserId, Boolean areWeFriend) {
+    public Friend(FriendId id, User toUserId, User fromUserId, boolean areWeFriend) {
+        this.id = id;
         this.toUserId = toUserId;
         this.fromUserId = fromUserId;
         this.areWeFriend = areWeFriend;

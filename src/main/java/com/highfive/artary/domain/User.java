@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Data
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = {"friends"})
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "user")
 public class User extends BaseEntity {
@@ -56,5 +56,9 @@ public class User extends BaseEntity {
         this.nickname = nickname;
         this.password = password;
         this.email = email;
+    }
+
+    public void add(Friend friend) {
+        friends.add(friend);
     }
 }
