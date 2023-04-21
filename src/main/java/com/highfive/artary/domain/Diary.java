@@ -2,6 +2,7 @@ package com.highfive.artary.domain;
 
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "diary")
 public class Diary extends BaseEntity{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "diary_id")
@@ -20,22 +20,32 @@ public class Diary extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @NonNull
     private User user;
 
-    @NonNull
+    @NotEmpty
     private String title;
 
-    @NonNull
+    @NotEmpty
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    @NonNull
-    private String picture;
+    @Column(name = "image_url")
+    @NotEmpty
+    private String image;
 
-    @NonNull
+    @NotEmpty
     private String emotion;
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Sticker> stickers = new ArrayList<>();
+
+    @Builder
+    public Diary(User user, String title, String content, String image, String emotion) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.image = image;
+        this.emotion = emotion;
+    }
+
 }
