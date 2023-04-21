@@ -1,6 +1,7 @@
 package com.highfive.artary.repository;
 
 import com.highfive.artary.domain.Diary;
+import com.highfive.artary.domain.Emotion;
 import com.highfive.artary.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ class DiaryRepositoryTest {
         User userB = createUser("userB", "B", "1234", "userB@artary.com");
         User userC = createUser("userC", "C", "1234", "userC@artary.com");
 
-        Diary diary = createDiary(userA, "오늘의 일기","오늘은 무언가를 배웠다.","https://example.com/image.jpg","기쁨");
+        Diary diary = createDiary(userA, "오늘의 일기","오늘은 무언가를 배웠다.","https://example.com/image.jpg",Emotion.HAPPY);
 
         // when
         diaryRepository.save(diary);
@@ -54,7 +55,7 @@ class DiaryRepositoryTest {
         // given
         User userA = createUser("userA", "A", "1234", "userA@artary.com");
 
-        Diary diary = createDiary(userA, "오늘의 일기","오늘은 무언가를 배웠다.","https://example.com/image.jpg","기쁨");
+        Diary diary = createDiary(userA, "오늘의 일기","오늘은 무언가를 배웠다.","https://example.com/image.jpg",Emotion.HAPPY);
         diaryRepository.save(diary);
 
         // when
@@ -74,7 +75,7 @@ class DiaryRepositoryTest {
     void deleteDiaryTest() {
         // given
         User userA = createUser("userA", "A", "1234", "userA@artary.com");
-        Diary diary = createDiary(userA, "오늘의 일기","오늘은 무언가를 배웠다.","https://example.com/image.jpg","기쁨");
+        Diary diary = createDiary(userA, "오늘의 일기","오늘은 무언가를 배웠다.","https://example.com/image.jpg",Emotion.HAPPY);
         diaryRepository.save(diary);
 
         // when
@@ -92,7 +93,7 @@ class DiaryRepositoryTest {
         User userA = createUser("userA", "A", "1234", "userA@artary.com");
 
         // when
-        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> createDiary(userA, null, "오늘은 무언가를 배웠다.", "https://example.com/image.jpg", "기쁨"));
+        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> createDiary(userA, null, "오늘은 무언가를 배웠다.", "https://example.com/image.jpg", Emotion.HAPPY));
 
         // then
         assertThat(exception).isInstanceOf(ConstraintViolationException.class);
@@ -110,7 +111,7 @@ class DiaryRepositoryTest {
         return user;
     }
 
-    private Diary createDiary(User user, String title, String content, String image, String emotion) {
+    private Diary createDiary(User user, String title, String content, String image, Emotion emotion) {
         Diary diary = Diary.builder()
                 .user(user)
                 .title(title)

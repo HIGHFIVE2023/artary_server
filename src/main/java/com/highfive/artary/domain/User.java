@@ -47,7 +47,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "fromUserId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friend> friends = new ArrayList<>();
 
-    @OneToMany(mappedBy = "fromUserId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Alarm> alarms = new ArrayList<>();
 
     @Builder
@@ -58,7 +58,11 @@ public class User extends BaseEntity {
         this.email = email;
     }
 
-    public void add(Friend friend) {
+    public void addFriend(Friend friend) {
         friends.add(friend);
+    }
+
+    public void addAlarm(Alarm alarm) {
+        alarms.add(alarm);
     }
 }

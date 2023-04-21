@@ -33,14 +33,14 @@ public class Diary extends BaseEntity{
     @NotEmpty
     private String image;
 
-    @NotEmpty
-    private String emotion;
+    @NonNull
+    private Emotion emotion;
 
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Sticker> stickers = new ArrayList<>();
 
     @Builder
-    public Diary(User user, String title, String content, String image, String emotion) {
+    public Diary(User user, String title, String content, String image, Emotion emotion) {
         this.user = user;
         this.title = title;
         this.content = content;
@@ -48,4 +48,7 @@ public class Diary extends BaseEntity{
         this.emotion = emotion;
     }
 
+    public void addSticker(Sticker sticker) {
+        stickers.add(sticker);
+    }
 }

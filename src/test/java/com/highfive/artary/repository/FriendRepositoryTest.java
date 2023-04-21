@@ -57,7 +57,7 @@ class FriendRepositoryTest {
 
         Friend findFriend = userA.getFriends()
                             .stream()
-                            .filter(c -> c.getFromUserId().equals(userB))
+                            .filter(f -> f.getFromUserId().equals(userB))
                             .findFirst()
                             .get();
 
@@ -131,8 +131,8 @@ class FriendRepositoryTest {
                 .areWeFriend(areWeFriend)
                 .build();
 
-        toUser.add(friend);
-        fromUser.add(friend);
+        toUser.addFriend(friend);
+        fromUser.addFriend(friend);
 
         friendRepository.save(friend);
         return friend;

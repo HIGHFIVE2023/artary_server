@@ -1,9 +1,11 @@
 package com.highfive.artary.domain;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.hibernate.annotations.Check;
+import org.hibernate.annotations.ColumnDefault;
 
 
 import javax.persistence.*;
@@ -13,11 +15,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name = "alarm",
-    uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"to_user_id", "from_user_id"})
-    })
-@Check(constraints = "to_user_id <> from_user_id")
+@Table(name = "alarm")
 public class Alarm {
 
     @Id
@@ -25,15 +23,15 @@ public class Alarm {
     @Column(name = "alarm_id")
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "to_user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     @NonNull
-    private User toUserId;
+    private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "from_user_id")
+    @ManyToOne
+    @JoinColumn(name = "from_user")
     @NonNull
-    private User fromUserId;
+    private User fromUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_id")
@@ -42,7 +40,7 @@ public class Alarm {
 
     @NonNull
     @Column(name = "alarm_type")
-    private String type;
+    private AlarmType type;
 
     @NonNull
     @Column(name = "alarm_content")
@@ -51,5 +49,15 @@ public class Alarm {
     @Column(updatable=false, name="created_at")
     private LocalDateTime createdAt;
 
+    @Column(columnDefinition = "Boolean default false")
     private Boolean checked;
+
+    @Builder
+    public Alarm(User user, User fromUser, AlarmType type, String content, Boolean checked) {
+        this.user = user;
+        this.fromUser = fromUser;
+        this.type = type;
+        this.content = content;
+        this.checked = checked;
+    }
 }
