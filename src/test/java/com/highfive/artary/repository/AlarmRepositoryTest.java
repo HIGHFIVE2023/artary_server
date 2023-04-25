@@ -38,7 +38,7 @@ class AlarmRepositoryTest {
         userB = createUser("userB", "B", "1234", "userB@artary.com");
         friend = createFriend(userA, userB, true);
         diary = createDiary(userA, "오늘의 일기","오늘은 무언가를 배웠다.","https://example.com/image.jpg", Emotion.HAPPY);
-        sticker = createSticker(userB, diary, StickerType.LUCK, "https://example.com/image.jpg");
+        sticker = createSticker(userB, diary, StickerCategory.LOVE);
     }
 
     @Test
@@ -136,12 +136,11 @@ class AlarmRepositoryTest {
         return diary;
     }
 
-    private Sticker createSticker(User user, Diary diary, StickerType type, String image) {
+    private Sticker createSticker(User user, Diary diary, StickerCategory type) {
         Sticker sticker = Sticker.builder()
                 .user(user)
                 .diary(diary)
                 .type(type)
-                .image(image)
                 .build();
         diary.addSticker(sticker);
         em.persist(sticker);

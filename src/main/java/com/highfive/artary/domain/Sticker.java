@@ -19,29 +19,28 @@ public class Sticker extends BaseEntity{
     @Column(name = "sticker_id")
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    @NonNull
-    private User user;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_id")
     @NonNull
     private Diary diary;
 
-    @Column(name = "sticker_type")
-    @NonNull
-    private StickerType type;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "img")
-    @NonNull
-    private String image;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "sticker", nullable = false)
+    private StickerCategory type;
+
+    @Column(name = "image_url")
+    private String imageUrl;
 
     @Builder
-    public Sticker(User user, Diary diary, StickerType type, String image) {
-        this.user = user;
+    public Sticker(Diary diary, User user, StickerCategory type) {
         this.diary = diary;
-        this.type =  type;
-        this.image = image;
+        this.user = user;
+        this.type = type;
     }
+
+
 }

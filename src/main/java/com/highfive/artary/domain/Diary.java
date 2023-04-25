@@ -51,4 +51,13 @@ public class Diary extends BaseEntity{
     public void addSticker(Sticker sticker) {
         stickers.add(sticker);
     }
+
+    public String getStickerUrl() {
+        StringBuilder sb = new StringBuilder();
+        for (Sticker sticker : stickers) {
+            sb.append(sticker.getType().getUrl());
+        }
+        return sb.toString();
+    }
+
 }
