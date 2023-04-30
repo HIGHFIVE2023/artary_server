@@ -1,5 +1,6 @@
 package com.highfive.artary.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -38,6 +39,7 @@ public class User extends BaseEntity {
     @Column(name = "profile_img")
     private String image;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diary> diaries = new ArrayList<>();
 

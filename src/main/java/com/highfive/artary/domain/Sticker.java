@@ -1,5 +1,6 @@
 package com.highfive.artary.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,11 +21,13 @@ public class Sticker extends BaseEntity{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     @JoinColumn(name = "diary_id")
     @NonNull
     private Diary diary;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -40,7 +43,10 @@ public class Sticker extends BaseEntity{
         this.diary = diary;
         this.user = user;
         this.type = type;
+        this.imageUrl = this.getType().getUrl();
     }
 
-
+    public void update(StickerCategory type) {
+        this.type = type;
+    }
 }
