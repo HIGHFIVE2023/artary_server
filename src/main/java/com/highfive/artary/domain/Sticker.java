@@ -14,7 +14,6 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "sticker")
 public class Sticker extends BaseEntity{
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sticker_id")
@@ -38,15 +37,26 @@ public class Sticker extends BaseEntity{
     @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "x_coordinate")
+    private int xCoordinate;
+
+    @Column(name = "y_coordinate")
+    private int yCoordinate;
+
     @Builder
-    public Sticker(Diary diary, User user, StickerCategory type) {
+    public Sticker(Diary diary, User user, StickerCategory type, int xCoordinate, int yCoordinate) {
         this.diary = diary;
         this.user = user;
         this.type = type;
         this.imageUrl = this.getType().getUrl();
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
     }
 
     public void update(StickerCategory type) {
         this.type = type;
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
     }
+
 }
