@@ -2,7 +2,7 @@ package com.highfive.artary.dto.sticker;
 
 import com.highfive.artary.domain.Diary;
 import com.highfive.artary.domain.Sticker;
-import com.highfive.artary.domain.StickerCategory;
+import com.highfive.artary.domain.StickerType;
 import com.highfive.artary.domain.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ public class StickerResponseDto {
     private final Long id;
     private final Diary diary;
     private final User user;
-    private final StickerCategory type;
+    private final StickerType type;
 
     private final int xCoordinate;
 

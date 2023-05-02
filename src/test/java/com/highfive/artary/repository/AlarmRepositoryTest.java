@@ -1,7 +1,6 @@
 package com.highfive.artary.repository;
 
 import com.highfive.artary.domain.*;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -38,7 +36,7 @@ class AlarmRepositoryTest {
         userB = createUser("userB", "B", "1234", "userB@artary.com");
         friend = createFriend(userA, userB, true);
         diary = createDiary(userA, "오늘의 일기","오늘은 무언가를 배웠다.","https://example.com/image.jpg", Emotion.HAPPY);
-        sticker = createSticker(userB, diary, StickerCategory.LOVE,1,1);
+        sticker = createSticker(userB, diary, StickerType.LOVE,1,1);
     }
 
     @Test
@@ -136,7 +134,7 @@ class AlarmRepositoryTest {
         return diary;
     }
 
-    private Sticker createSticker(User user, Diary diary, StickerCategory type, int xCoordinate, int yCoordinate) {
+    private Sticker createSticker(User user, Diary diary, StickerType type, int xCoordinate, int yCoordinate) {
         Sticker sticker = Sticker.builder()
                 .user(user)
                 .diary(diary)

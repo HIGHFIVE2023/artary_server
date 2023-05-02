@@ -1,6 +1,6 @@
 package com.highfive.artary.domain;
 
-public enum StickerCategory {
+public enum StickerType {
     HAPPY("https://cdn-icons-png.flaticon.com/512/4746/4746825.png"),
     SAD("https://cdn-icons-png.flaticon.com/512/4746/4746825.png"),
     LOVE("https://cdn-icons-png.flaticon.com/512/4746/4746825.png"),
@@ -8,7 +8,7 @@ public enum StickerCategory {
 
     private final String url;
 
-    StickerCategory(String url) {
+    StickerType(String url) {
         this.url = url;
     }
 

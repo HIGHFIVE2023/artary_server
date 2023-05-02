@@ -32,7 +32,7 @@ public class Sticker extends BaseEntity{
 
     @Enumerated(value = EnumType.STRING)
     @Column(name = "sticker", nullable = false)
-    private StickerCategory type;
+    private StickerType type;
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -44,7 +44,7 @@ public class Sticker extends BaseEntity{
     private int yCoordinate;
 
     @Builder
-    public Sticker(Diary diary, User user, StickerCategory type, int xCoordinate, int yCoordinate) {
+    public Sticker(Diary diary, User user, StickerType type, int xCoordinate, int yCoordinate) {
         this.diary = diary;
         this.user = user;
         this.type = type;
@@ -53,10 +53,8 @@ public class Sticker extends BaseEntity{
         this.yCoordinate = yCoordinate;
     }
 
-    public void update(StickerCategory type) {
+    public void update(StickerType type) {
         this.type = type;
-        this.xCoordinate = xCoordinate;
-        this.yCoordinate = yCoordinate;
     }
 
 }
