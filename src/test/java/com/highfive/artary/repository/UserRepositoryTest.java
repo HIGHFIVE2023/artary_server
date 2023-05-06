@@ -8,9 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Log4j2
@@ -24,6 +26,7 @@ class UserRepositoryTest {
 
     @BeforeEach
      void setUp(){
+        this.userRepository.deleteAll();
 
         user = User.builder()
                 .name("테스트1")
@@ -61,8 +64,8 @@ class UserRepositoryTest {
     @Test
     @DisplayName("이메일로 유저 찾기")
      void findByEmailTest(){
-        User find = userRepository.findByEmail(user.getEmail());
-        assertThat(find).isEqualTo(user);
+        Optional<User> find = userRepository.findByEmail(user.getEmail());
+        assertThat(find.orElse(null)).isEqualTo(user);
     }
 
     @Test
@@ -85,7 +88,7 @@ class UserRepositoryTest {
     public void deleteUserTest(){
         userRepository.save(user);
         userRepository.delete(user);
-        assertThat(userRepository.findByEmail(user.getEmail())).isNull();
+        assertThat(userRepository.findByEmail(user.getEmail())).isEmpty();
     }
 
 }

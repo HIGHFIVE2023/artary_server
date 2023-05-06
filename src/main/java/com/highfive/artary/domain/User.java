@@ -2,20 +2,22 @@ package com.highfive.artary.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Data
 @ToString(callSuper = true, exclude = {"friends"})
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "user")
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -30,6 +32,9 @@ public class User extends BaseEntity {
 
     @NonNull
     private String password;
+
+   @NonNull
+    private String auth;
 
     @NonNull
     @Email
@@ -52,12 +57,22 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Alarm> alarms = new ArrayList<>();
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> roles = new HashSet<>();
+        for (String role : auth.split(",")) {
+            roles.add(new SimpleGrantedAuthority(role));
+        }
+        return roles;
+    }
+
     @Builder
-    public User(String name, String nickname, String password, String email) {
+    public User(String name, String nickname, String password, String email, String auth, Boolean enabled) {
         this.name = name;
         this.nickname = nickname;
         this.password = password;
         this.email = email;
+        this.auth = auth;
     }
 
     public void addFriend(Friend friend) {
@@ -66,5 +81,31 @@ public class User extends BaseEntity {
 
     public void addAlarm(Alarm alarm) {
         alarms.add(alarm);
+    }
+
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
