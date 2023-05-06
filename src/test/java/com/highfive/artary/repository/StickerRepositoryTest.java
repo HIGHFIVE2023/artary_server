@@ -46,7 +46,7 @@ class StickerRepositoryTest {
     @Test
     @DisplayName("스티커 생성")
     void createStickerTest() {
-        sticker = createSticker(userB, diary, StickerType.LOVE, 1,1);
+        sticker = createSticker(userB, diary, StickerType.LOVE);
 
         stickerRepository.save(sticker);
 
@@ -59,7 +59,7 @@ class StickerRepositoryTest {
     @DisplayName("스티커로 다이어리 찾기")
     void stickerDiaryTest() {
         // given
-        sticker = createSticker(userB, diary, StickerType.LOVE, 1,1);
+        sticker = createSticker(userB, diary, StickerType.LOVE);
         diaryRepository.save(diary);
 
         // when
@@ -72,7 +72,7 @@ class StickerRepositoryTest {
     @Test
     @DisplayName("스티커 Url 확인")
     void stickerUrlTest() {
-        sticker = createSticker(userB, diary, StickerType.LOVE,1,1);
+        sticker = createSticker(userB, diary, StickerType.LOVE);
         String stickerUrl = sticker.getType().getUrl();
         assertNotNull(stickerUrl);
 
@@ -112,13 +112,11 @@ class StickerRepositoryTest {
         return diary;
     }
 
-    private Sticker createSticker(User user, Diary diary, StickerType type, int xCoordinate, int yCoordinate) {
+    private Sticker createSticker(User user, Diary diary, StickerType type) {
         Sticker sticker = Sticker.builder()
                 .user(user)
                 .diary(diary)
                 .type(type)
-                .xCoordinate(xCoordinate)
-                .yCoordinate(yCoordinate)
                 .build();
         diary.addSticker(sticker);
         em.persist(sticker);
