@@ -19,7 +19,6 @@ public class UserTestHelper {
                 .name(name)
                 .nickname("test"+name)
                 .email(name+"@test.com")
-                .enabled(true)
                 .auth("ROLE_USER")
                 .build();
     }
