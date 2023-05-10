@@ -20,6 +20,7 @@ public class UserTestHelper {
                 .nickname("test"+name)
                 .email(name+"@test.com")
                 .auth("ROLE_USER")
+                .image("image_url")
                 .build();
     }
 
@@ -34,6 +35,7 @@ public class UserTestHelper {
         assertNotNull((user.getId()));
         assertNotNull((user.getCreatedAt()));
         assertNotNull((user.getUpdatedAt()));
+        assertNotNull((user.getImage()));
         assertTrue(user.isEnabled());
         assertEquals(name, user.getName());
         assertEquals(name+"@test.com", user.getEmail());

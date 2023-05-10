@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 import javax.validation.constraints.Email;
 import javax.persistence.*;
 import java.util.*;
@@ -33,7 +34,7 @@ public class User extends BaseEntity implements UserDetails{
     @NonNull
     private String password;
 
-   @NonNull
+    @NonNull
     private String auth;
 
     @NonNull
@@ -67,12 +68,13 @@ public class User extends BaseEntity implements UserDetails{
     }
 
     @Builder
-    public User(String name, String nickname, String password, String email, String auth) {
+    public User(String name, String nickname, String password, String email, String auth, String image) {
         this.name = name;
         this.nickname = nickname;
         this.password = password;
         this.email = email;
         this.auth = auth;
+        this.image = image;
     }
 
     public void addFriend(Friend friend) {
@@ -108,4 +110,6 @@ public class User extends BaseEntity implements UserDetails{
     public boolean isEnabled() {
         return true;
     }
+
+
 }

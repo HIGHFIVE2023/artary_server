@@ -1,7 +1,9 @@
 package com.highfive.artary.config;
 
+import com.highfive.artary.security.Custom403Handler;
 import com.highfive.artary.service.UserService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -10,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 
 ;
@@ -30,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors().and()
+                .httpBasic().disable()
                 .csrf().disable()
                 .authorizeRequests(request->
                         request.antMatchers("/", "/users/signup/**",
@@ -38,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .formLogin(login->
                         login.loginPage("/users/login")// url 다시 생각해보기
-                                .loginProcessingUrl("/users/loginprocess")
+                                .loginProcessingUrl("/users/login")
                                 .permitAll()
                                 .defaultSuccessUrl("/", false)
                                 .failureUrl("/users/login-error")
@@ -46,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout(logout->
                         logout.logoutSuccessUrl("/"))
                 .exceptionHandling(error->
-                        error.accessDeniedPage("/users/access-denied")
+                        error.accessDeniedHandler(accessDeniedHandler())
                 )
         ;
     }
@@ -56,6 +60,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userService)
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
+
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new Custom403Handler();
+    }
+
 
     @Override
     public void configure(WebSecurity web) throws Exception {

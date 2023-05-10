@@ -33,6 +33,8 @@ class UserRepositoryTest {
                 .nickname("테1")
                 .password("1234")
                 .email("test1@gmail.com")
+                .auth("ROLE_USER")
+                .image("image1_url")
                 .build();
 
         user2 = User.builder()
@@ -40,6 +42,8 @@ class UserRepositoryTest {
                 .nickname("테2")
                 .password("1234")
                 .email("test2@gmail.com")
+                .auth("ROLE_USER")
+                .image("image2_url")
                 .build();
 
         user3 = User.builder()
@@ -47,6 +51,8 @@ class UserRepositoryTest {
                 .nickname("테3")
                 .password("1234")
                 .email("test3@gmail.com")
+                .auth("ROLE_USER")
+                .image("image3_url")
                 .build();
 
         userRepository.save(user);
