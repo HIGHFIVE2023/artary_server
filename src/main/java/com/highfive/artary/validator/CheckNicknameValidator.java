@@ -13,7 +13,7 @@ public class CheckNicknameValidator extends AbstractValidator<UserDto> {
     @Override
     protected void doValidate(UserDto dto, Errors errors) {
         if(userRepository.existsByNickname(dto.getNickname())){
-            errors.rejectValue("nickname","닉네임 중복 오류", "이미 사용중인 닉네임입니다.");
+            errors.rejectValue("nickname","닉네임 중복 오류", "이미 사용 중인 닉네임입니다.");
         }
     }
 }
