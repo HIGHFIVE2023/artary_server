@@ -2,7 +2,6 @@ package com.highfive.artary.config;
 
 import com.highfive.artary.security.Custom403Handler;
 import com.highfive.artary.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +28,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.userService = userService;
     }
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -43,7 +41,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .formLogin(login->
                         login.loginPage("/users/login")
-                                .loginProcessingUrl("/users/login")
+                                .loginProcessingUrl("/users/loginprocess")
+                                .usernameParameter("email")
+                                .passwordParameter("password")
                                 .permitAll()
                                 .defaultSuccessUrl("/", false)
                                 .failureUrl("/users/login-error")
@@ -76,6 +76,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         PathRequest.toStaticResources().atCommonLocations()
                 )
         ;
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
 }

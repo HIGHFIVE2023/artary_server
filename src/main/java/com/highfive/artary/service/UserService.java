@@ -64,8 +64,6 @@ public class UserService implements UserDetailsService {
     public boolean checkNicknameDuplication(String nickname) {
         boolean nicknameDuplicate = userRepository.existsByNickname(nickname);
         return nicknameDuplicate;
-
     }
-
 
 }
