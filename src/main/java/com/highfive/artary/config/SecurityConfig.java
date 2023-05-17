@@ -15,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
 
-;
 
 @EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -33,7 +32,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors().and()
-                .httpBasic().disable()
                 .csrf().disable()
                 .authorizeRequests(request->
                         request.antMatchers("/", "/users/signup/**",
@@ -41,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .anyRequest().authenticated()
                 )
                 .formLogin(login->
-                        login.loginPage("/users/login")// url 다시 생각해보기
+                        login.loginPage("/users/login")
                                 .loginProcessingUrl("/users/login")
                                 .permitAll()
                                 .defaultSuccessUrl("/", false)

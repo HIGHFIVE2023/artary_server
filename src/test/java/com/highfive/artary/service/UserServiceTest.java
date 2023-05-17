@@ -36,7 +36,7 @@ class UserServiceTest extends WithUserTest {
     @Test
     void searchEmailTest() {
         User user1 = userTestHelper.createUser("user1");
-        User savedUser = (User) userSecurityService.loadUserByUsername("user1@test.com");
+        User savedUser = (User) userService.loadUserByUsername("user1@test.com");
         userTestHelper.assertUser(savedUser, "user1");
     }
 

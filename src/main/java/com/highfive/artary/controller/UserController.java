@@ -1,19 +1,14 @@
 package com.highfive.artary.controller;
 
-import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.UserDto;
-import com.highfive.artary.service.UserSecurityService;
+import com.highfive.artary.service.MailService;
 import com.highfive.artary.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/users")
@@ -21,30 +16,29 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
 
     private final UserService userService;
-    private final UserSecurityService userSecurityService;
+
+    private final MailService mailService;
+
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody UserDto userDto) throws Exception {
-        userSecurityService.save(userDto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    //login, logout 재작성해야함
-
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> createUser(@RequestBody UserDto userDto) throws Exception {
         try {
-            return ResponseEntity.ok("로그인에 성공했습니다.");
+            userService.save(userDto);
+            return ResponseEntity.ok("회원가입 성공 email: " + userDto.getEmail());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인에 실패했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원가입 실패");
         }
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response){
-        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-        return ResponseEntity.ok().build();
-
+    @PostMapping("/signup/mailConfirm")
+    @ResponseBody
+    public String mailConfirm(@RequestParam String email) throws Exception{
+        String code = mailService.sendSimpleMessage(email);
+        return code;
     }
+
+
+    //login, logout 재작성해야함
+
 
 }
