@@ -4,10 +4,26 @@ import com.highfive.artary.dto.UserDto;
 import com.highfive.artary.service.MailService;
 import com.highfive.artary.service.UserService;
 
+import com.highfive.artary.validator.CheckEmailValidator;
+import com.highfive.artary.validator.CheckNicknameValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
+
 
 
 @RestController
@@ -16,19 +32,35 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-
     private final MailService mailService;
-
+    private final CheckNicknameValidator checkNicknameValidator;
+    private final CheckEmailValidator checkEmailValidator;
+    private AuthenticationManager authenticationManager;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> createUser(@RequestBody UserDto userDto) throws Exception {
-        try {
-            userService.save(userDto);
-            return ResponseEntity.ok("회원가입 성공 email: " + userDto.getEmail());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원가입 실패");
+    @ResponseBody
+    public ResponseEntity<?> signup(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) throws Exception {
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorMap.put("valid_" + error.getField(), error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(errorMap);
         }
+        userService.save(userDto);
+        return ResponseEntity.ok(userDto);
     }
+
+    @GetMapping("/signup/email/{email}/exists")
+    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email){
+        return ResponseEntity.ok(userService.checkEmailDuplication(email));
+    }
+
+    @GetMapping("/signup/nickname/{nickname}/exists")
+    public ResponseEntity<Boolean> checkNicknameDuplicate(@PathVariable String nickname){
+        return ResponseEntity.ok(userService.checkNicknameDuplication(nickname));
+    }
+
 
     @PostMapping("/signup/mailConfirm")
     @ResponseBody
@@ -36,9 +68,12 @@ public class UserController {
         String code = mailService.sendSimpleMessage(email);
         return code;
     }
-
-
-    //login, logout 재작성해야함
-
+    
+    // 커스텀 유효성 검증
+    @InitBinder
+    public void validatorBinder(WebDataBinder binder) {
+        binder.addValidators(checkNicknameValidator);
+        binder.addValidators(checkEmailValidator);
+    }
 
 }

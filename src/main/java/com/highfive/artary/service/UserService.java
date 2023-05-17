@@ -56,4 +56,16 @@ public class UserService implements UserDetailsService {
                 .password(userDto.getPassword()).build()).getId();
     }
 
+    public boolean checkEmailDuplication(String email) {
+        boolean emailDuplicate = userRepository.existsByEmail(email);
+        return emailDuplicate;
+    }
+
+    public boolean checkNicknameDuplication(String nickname) {
+        boolean nicknameDuplicate = userRepository.existsByNickname(nickname);
+        return nicknameDuplicate;
+
+    }
+
+
 }

@@ -24,15 +24,13 @@ public class UserDto {
             message = "비밀번호는 8~30 자리이면서 1개 이상의 알파벳, 숫자, 특수문자를 포함해야합니다.")
     private String password;
 
-    private String checkedPassword;
-
     @NotNull(message="이메일 주소를 입력해주세요.")
     @Email(message = "올바른 이메일 주소를 입력해주세요.")
     private String email;
 
     private String auth;
 
-    @NotNull(message="닉네임을 입력해주세요")
+    @NotNull(message="닉네임을 입력해주세요.")
     private String image;
 
 }
