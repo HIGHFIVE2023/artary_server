@@ -6,6 +6,7 @@ import com.highfive.artary.domain.User;
 import lombok.*;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class DiaryRequestDto {
 
