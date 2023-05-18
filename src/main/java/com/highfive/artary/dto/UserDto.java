@@ -1,6 +1,5 @@
 package com.highfive.artary.dto;
 
-import com.highfive.artary.domain.User;
 import lombok.*;
 
 import javax.validation.constraints.*;
@@ -30,7 +29,6 @@ public class UserDto {
 
     private String auth;
 
-    @NotNull(message="닉네임을 입력해주세요.")
     private String image;
 
 }
