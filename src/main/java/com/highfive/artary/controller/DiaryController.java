@@ -5,9 +5,13 @@ import com.highfive.artary.dto.diary.DiaryRequestDto;
 import com.highfive.artary.dto.diary.DiaryResponseDto;
 import com.highfive.artary.dto.sticker.StickerResponseDto;
 import com.highfive.artary.service.DiaryService;
+import com.highfive.artary.service.StableDiffusionService;
 import com.highfive.artary.service.StickerService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +27,7 @@ public class DiaryController {
 
     private final DiaryService diaryService;
     private final StickerService stickerService;
+    private final StableDiffusionService stablediffusionService;
 
     @PostMapping("/write")
     public String saveDiary(@Validated @RequestBody DiaryRequestDto diaryDto) {
@@ -56,5 +61,15 @@ public class DiaryController {
         diaryService.delete(diary_id);
 
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/{diary_id}/picture")
+    public ResponseEntity<byte[]> getPicture(@PathVariable Long diary_id) {
+        byte[] imageBytes = stablediffusionService.getTextToImage(diary_id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentLength(imageBytes.length);
+
+        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
 }

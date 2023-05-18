@@ -32,7 +32,6 @@ public class Diary extends BaseEntity{
     private String content;
 
     @Column(name = "image_url")
-    @NotEmpty
     private String image;
 
     @NonNull
