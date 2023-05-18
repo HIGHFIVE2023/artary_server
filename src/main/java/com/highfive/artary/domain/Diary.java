@@ -32,11 +32,12 @@ public class Diary extends BaseEntity{
     private String content;
 
     @Column(name = "image_url")
-    @NotEmpty
     private String image;
 
     @NonNull
     private Emotion emotion;
+
+    private String summary;
 
     @JsonIgnore
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)

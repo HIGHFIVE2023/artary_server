@@ -29,10 +29,18 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	// https://mvnrepository.com/artifact/org.json/json
+	implementation group: 'org.json', name: 'json', version: '20160810'
+	implementation 'commons-io:commons-io:2.11.0'
+	// WebClient
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-webflux'
+
 }
 
 tasks.named('test') {

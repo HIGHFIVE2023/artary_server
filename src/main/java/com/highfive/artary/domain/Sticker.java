@@ -37,20 +37,12 @@ public class Sticker extends BaseEntity{
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "x_coordinate")
-    private int xCoordinate;
-
-    @Column(name = "y_coordinate")
-    private int yCoordinate;
-
     @Builder
     public Sticker(Diary diary, User user, StickerType type, int xCoordinate, int yCoordinate) {
         this.diary = diary;
         this.user = user;
         this.type = type;
         this.imageUrl = this.getType().getUrl();
-        this.xCoordinate = xCoordinate;
-        this.yCoordinate = yCoordinate;
     }
 
     public void update(StickerType type) {

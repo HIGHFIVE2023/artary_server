@@ -18,10 +18,6 @@ public class StickerResponseDto {
     private final User user;
     private final StickerType type;
 
-    private final int xCoordinate;
-
-    private final int yCoordinate;
-
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
@@ -30,8 +26,6 @@ public class StickerResponseDto {
         this.diary = sticker.getDiary();
         this.user = sticker.getUser();
         this.type = sticker.getType();
-        this.xCoordinate = sticker.getXCoordinate();
-        this.yCoordinate = sticker.getYCoordinate();
         this.createdAt = sticker.getCreatedAt();
         this.updatedAt = sticker.getUpdatedAt();
     }
