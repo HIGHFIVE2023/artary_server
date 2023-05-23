@@ -31,7 +31,7 @@ public class DiaryController {
 
     @PostMapping("/write")
     public String saveDiary(@Validated @RequestBody DiaryRequestDto diaryDto) {
-        Long userId = 845L;
+        Long userId = 1L;
         Long savedId = diaryService.save(diaryDto, userId);
 
         return "redirect:/diary/"+savedId;
