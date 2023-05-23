@@ -97,6 +97,8 @@ public class UserController {
         }
     }
 
+
+
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -105,5 +107,7 @@ public class UserController {
         }
         return ResponseEntity.ok("로그아웃 성공");
     }
+
+
 
 }
