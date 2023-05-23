@@ -39,7 +39,6 @@ public class UserController {
     private final MailService mailService;
     private final CheckNicknameValidator checkNicknameValidator;
     private final CheckEmailValidator checkEmailValidator;
-
     private final AuthenticationManager authenticationManager;
 
     @PostMapping("/signup")
@@ -66,8 +65,7 @@ public class UserController {
         return ResponseEntity.ok(userService.checkNicknameDuplication(nickname));
     }
 
-
-    @PostMapping("/signup/mailConfirm")
+    @PostMapping("/password/mailConfirm")
     @ResponseBody
     public String mailConfirm(@RequestParam String email) throws Exception{
         String code = mailService.sendSimpleMessage(email);
@@ -80,7 +78,6 @@ public class UserController {
         binder.addValidators(checkNicknameValidator);
         binder.addValidators(checkEmailValidator);
     }
-
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserDto userDto) {
@@ -108,6 +105,5 @@ public class UserController {
         }
         return ResponseEntity.ok("로그아웃 성공");
     }
-
 
 }
