@@ -51,9 +51,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling(error->
                         error.accessDeniedHandler(accessDeniedHandler())
                 )
-               .oauth2Login()
-                    .userInfoEndpoint()
-                        .userService(customOAuth2UserService);
+                .oauth2Login(login ->
+                        login
+                                .defaultSuccessUrl("/") // OAuth2 인증 후 기본 성공 URL 지정
+                                .userInfoEndpoint()
+                                .userService(customOAuth2UserService)
+                );
 
     }
 

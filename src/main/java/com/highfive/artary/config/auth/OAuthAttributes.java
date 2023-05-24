@@ -15,17 +15,15 @@ public class OAuthAttributes {
     private String email;
     private String image;
     private String nickname;
-    private String password;
 
     @Builder
-    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String image, String nickname, String password) {
+    public OAuthAttributes(Map<String, Object> attributes, String nameAttributeKey, String name, String email, String image, String nickname) {
         this.attributes = attributes;
         this.nameAttributeKey = nameAttributeKey;
         this.name = name;
         this.email = email;
         this.image = image;
         this.nickname = nickname;
-        this.password = password;
 
     }
 
@@ -44,6 +42,8 @@ public class OAuthAttributes {
         return OAuthAttributes.builder()
                 .name((String) kakaoProfile.get("nickname"))
                 .email((String) kakaoAccount.get("email"))
+                .image((String) kakaoProfile.get("profile_image_url"))
+                .nickname((String) kakaoProfile.get("nickname"))
                 .nameAttributeKey(userNameAttributeName)
                 .attributes(attributes)
                 .build();
