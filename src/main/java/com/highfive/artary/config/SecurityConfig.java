@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .oauth2Login(login ->
                         login
-                                .defaultSuccessUrl("/") // OAuth2 인증 후 기본 성공 URL 지정
+                                .defaultSuccessUrl("http://localhost:3000/") 
                                 .userInfoEndpoint()
                                 .userService(customOAuth2UserService)
                 );
