@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -30,8 +31,9 @@ public class DiaryController {
     private final StableDiffusionService stablediffusionService;
 
     @PostMapping("/write")
-    public String saveDiary(@Validated @RequestBody DiaryRequestDto diaryDto) {
-        Long userId = 845L;
+    public String saveDiary(@Validated @RequestBody DiaryRequestDto diaryDto, @AuthenticationPrincipal User user) {
+        Long userId = user.getId();
+
         Long savedId = diaryService.save(diaryDto, userId);
 
         return "redirect:/diary/"+savedId;

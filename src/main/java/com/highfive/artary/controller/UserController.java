@@ -14,6 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -97,6 +98,11 @@ public class UserController {
         }
     }
 
+
+    @GetMapping("/login")
+    public String getUserInfo(@AuthenticationPrincipal Object principal) {
+        return principal.toString();
+    }
 
 
     @PostMapping("/logout")
