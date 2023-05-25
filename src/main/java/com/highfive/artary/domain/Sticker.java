@@ -38,7 +38,7 @@ public class Sticker extends BaseEntity{
     private String imageUrl;
 
     @Builder
-    public Sticker(Diary diary, User user, StickerType type, int xCoordinate, int yCoordinate) {
+    public Sticker(Diary diary, User user, StickerType type) {
         this.diary = diary;
         this.user = user;
         this.type = type;

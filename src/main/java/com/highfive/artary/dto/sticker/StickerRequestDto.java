@@ -15,10 +15,6 @@ public class StickerRequestDto {
     private User user;
     private StickerType type;
 
-    private int xCoordinate;
-
-    private int yCoordinate;
-
     public void setDiary(Diary diary) {
         this.diary = diary;
     }
@@ -32,8 +28,6 @@ public class StickerRequestDto {
                 .diary(diary)
                 .user(user)
                 .type(type)
-                .xCoordinate(xCoordinate)
-                .yCoordinate(yCoordinate)
                 .build();
 
         return sticker;

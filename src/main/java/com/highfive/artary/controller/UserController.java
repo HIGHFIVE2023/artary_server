@@ -98,10 +98,12 @@ public class UserController {
         }
     }
 
+
     @GetMapping("/login")
     public String getUserInfo(@AuthenticationPrincipal Object principal) {
         return principal.toString();
     }
+
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
@@ -111,5 +113,7 @@ public class UserController {
         }
         return ResponseEntity.ok("로그아웃 성공");
     }
+
+
 
 }

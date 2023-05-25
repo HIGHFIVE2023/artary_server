@@ -1,10 +1,11 @@
 package com.highfive.artary.config;
 
 import com.highfive.artary.security.Custom403Handler;
+import com.highfive.artary.config.auth.CustomOAuth2UserService;
 import com.highfive.artary.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -17,14 +18,13 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 
 @EnableWebSecurity(debug = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
-    public SecurityConfig(UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -51,7 +51,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling(error->
                         error.accessDeniedHandler(accessDeniedHandler())
                 )
-        ;
+                .oauth2Login(login ->
+                        login
+                                .defaultSuccessUrl("/") // OAuth2 인증 후 기본 성공 URL 지정
+                                .userInfoEndpoint()
+                                .userService(customOAuth2UserService)
+                );
+
     }
 
     @Override

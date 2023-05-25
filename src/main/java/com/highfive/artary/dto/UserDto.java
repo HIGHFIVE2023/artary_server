@@ -6,7 +6,6 @@ import javax.validation.constraints.*;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
@@ -27,7 +26,7 @@ public class UserDto {
     @Email(message = "올바른 이메일 주소를 입력해주세요.")
     private String email;
 
-    private String auth;
+    private String auth="ROLE_USER";
 
     private String image;
 
