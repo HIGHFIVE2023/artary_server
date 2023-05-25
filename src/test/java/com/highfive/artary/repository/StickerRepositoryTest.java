@@ -88,6 +88,38 @@ class StickerRepositoryTest {
         assertEquals(stickerUrl, diaryStickerUrl);
     }
 
+    @Test
+    @DisplayName("스티커 수정")
+    void modifyStickerTest() {
+        sticker = createSticker(userB, diary, StickerType.LOVE);
+
+        stickerRepository.save(sticker);
+
+        sticker.setType(StickerType.HAPPY);
+
+        stickerRepository.save(sticker);
+
+        // then
+        Optional<Sticker> result = stickerRepository.findById(sticker.getId());
+        assertThat(result.isPresent()).isTrue();
+        assertThat(result.get().getType()).isEqualTo(StickerType.HAPPY);
+    }
+
+    @Test
+    @DisplayName("스티커 삭제")
+    void deleteDiaryTest() {
+        // given
+        sticker = createSticker(userB, diary, StickerType.LOVE);
+
+        stickerRepository.save(sticker);
+
+        // when
+        stickerRepository.delete(sticker);
+
+        // then
+        Optional<Sticker> result = stickerRepository.findById(sticker.getId());
+        assertThat(result.isPresent()).isFalse();
+    }
 
     private User createUser(String name, String nickname, String password, String email) {
         User user = User.builder()
