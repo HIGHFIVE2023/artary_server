@@ -14,6 +14,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -95,6 +96,11 @@ public class UserController {
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("인증 중에 오류가 발생했습니다.");
         }
+    }
+
+    @GetMapping("/login")
+    public String getUserInfo(@AuthenticationPrincipal Object principal) {
+        return principal.toString();
     }
 
     @PostMapping("/logout")
