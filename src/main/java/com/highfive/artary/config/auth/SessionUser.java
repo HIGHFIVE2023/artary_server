@@ -13,13 +13,12 @@ public class SessionUser implements Serializable {
     private String email;
     private String image;
     private String nickname;
-    private String password;
 
     public SessionUser(User user){
         this.name = user.getName();
         this.email = user.getEmail();
         this.image = user.getImage();
         this.nickname = user.getNickname();
-        this.password = user.getPassword();
+
     }
 }
