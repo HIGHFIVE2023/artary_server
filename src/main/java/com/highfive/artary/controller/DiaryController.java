@@ -4,6 +4,7 @@ import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.diary.DiaryRequestDto;
 import com.highfive.artary.dto.diary.DiaryResponseDto;
 import com.highfive.artary.dto.sticker.StickerResponseDto;
+import com.highfive.artary.service.ClovaSummaryService;
 import com.highfive.artary.service.DiaryService;
 import com.highfive.artary.service.StableDiffusionService;
 import com.highfive.artary.service.StickerService;
@@ -29,6 +30,7 @@ public class DiaryController {
     private final DiaryService diaryService;
     private final StickerService stickerService;
     private final StableDiffusionService stablediffusionService;
+    private final ClovaSummaryService clovaSummaryService;
 
     @PostMapping("/write")
     public String saveDiary(@Validated @RequestBody DiaryRequestDto diaryDto, @AuthenticationPrincipal User user) {
@@ -73,5 +75,12 @@ public class DiaryController {
         headers.setContentLength(imageBytes.length);
 
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+    }
+
+    @GetMapping("/{diary_id}/summary")
+    public ResponseEntity<?> summaryDiary(@PathVariable Long diary_id) {
+        String summary = clovaSummaryService.summarizeDiary(diary_id);
+
+        return new ResponseEntity<>(summary, HttpStatus.OK);
     }
 }

@@ -17,8 +17,8 @@ public class Summary extends BaseEntity{
     @Column(name = "sticker_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @MapsId
     @JoinColumn(name = "diary_id")
     @NonNull
     private Diary diary;
@@ -28,4 +28,9 @@ public class Summary extends BaseEntity{
 
     @Column(name = "english")
     private String engSummary;
+
+    @Builder
+    public Summary(Diary diary) {
+        this.diary = diary;
+    }
 }

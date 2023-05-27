@@ -37,6 +37,9 @@ public class Diary extends BaseEntity{
     @NonNull
     private Emotion emotion;
 
+    @OneToOne(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Summary summary;
+
     @JsonIgnore
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Sticker> stickers = new ArrayList<>();
