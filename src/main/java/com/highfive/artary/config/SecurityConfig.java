@@ -15,8 +15,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-@EnableWebSecurity(debug = true)
+import java.util.Arrays;
+
+
+@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -34,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests(request->
                         request.antMatchers("/", "/users/signup/**",
-                                        "/users/login/**", "/users/email", "/users/password").permitAll()
+                                        "/users/login/**", "/users/email", "/users/password", "/oauth2/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .formLogin(login->
@@ -53,10 +59,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .oauth2Login(login ->
                         login
-                                .defaultSuccessUrl("http://localhost:3000/") 
+                                .defaultSuccessUrl("http://localhost:3000/")
                                 .userInfoEndpoint()
                                 .userService(customOAuth2UserService)
                 );
+
 
     }
 
@@ -86,6 +93,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
 }
