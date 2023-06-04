@@ -31,7 +31,6 @@ public class PapagoTranslationServiceImpl implements PapagoTranslationService {
     public String translateSummary(Long diary_id) {
         Summary summary = summaryRepository.findByDiaryId(diary_id);
         String koSummary = summary.getKoSummary();
-        String getTranslation = "";
 
         try {
             String text = URLEncoder.encode(koSummary, "UTF-8");
@@ -62,15 +61,16 @@ public class PapagoTranslationServiceImpl implements PapagoTranslationService {
             }
             br.close();
 
-            getTranslation = parseTranslationResponse(response.toString());
+            String getTranslation = parseTranslationResponse(response.toString());
             summary.setEngSummary(getTranslation);
             summaryRepository.save(summary);
 
+            return getTranslation;
+
         } catch (Exception e) {
             System.out.println(e);
+            return e.getMessage();
         }
-
-        return getTranslation;
     }
 
     private String parseTranslationResponse(String response) throws IOException {

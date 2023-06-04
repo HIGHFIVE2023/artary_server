@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Data
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = "diary")
 @Table(name = "summary")
 public class Summary extends BaseEntity{
 
