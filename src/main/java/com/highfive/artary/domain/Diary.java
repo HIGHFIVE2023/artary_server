@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @Data
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = "user")
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "diary")
 public class Diary extends BaseEntity{

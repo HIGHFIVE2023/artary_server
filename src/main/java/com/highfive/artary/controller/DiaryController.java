@@ -4,10 +4,7 @@ import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.diary.DiaryRequestDto;
 import com.highfive.artary.dto.diary.DiaryResponseDto;
 import com.highfive.artary.dto.sticker.StickerResponseDto;
-import com.highfive.artary.service.ClovaSummaryService;
-import com.highfive.artary.service.DiaryService;
-import com.highfive.artary.service.StableDiffusionService;
-import com.highfive.artary.service.StickerService;
+import com.highfive.artary.service.*;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +28,7 @@ public class DiaryController {
     private final StickerService stickerService;
     private final StableDiffusionService stablediffusionService;
     private final ClovaSummaryService clovaSummaryService;
+    private final PapagoTranslationService papagoTranslationService;
 
     @PostMapping("/write")
     public String saveDiary(@Validated @RequestBody DiaryRequestDto diaryDto, @AuthenticationPrincipal User user) {
@@ -82,5 +80,12 @@ public class DiaryController {
         String summary = clovaSummaryService.summarizeDiary(diary_id);
 
         return new ResponseEntity<>(summary, HttpStatus.OK);
+    }
+
+    @GetMapping("/{diary_id}/translate")
+    public ResponseEntity<?> translateSummary(@PathVariable Long diary_id) {
+        String engSummary = papagoTranslationService.translateSummary(diary_id);
+
+        return new ResponseEntity<>(engSummary, HttpStatus.OK);
     }
 }

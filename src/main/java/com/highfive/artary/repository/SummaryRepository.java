@@ -4,4 +4,5 @@ import com.highfive.artary.domain.Summary;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SummaryRepository extends JpaRepository<Summary, Long> {
+    Summary findByDiaryId(Long diary_id);
 }
