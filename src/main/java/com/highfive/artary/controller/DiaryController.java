@@ -36,7 +36,13 @@ public class DiaryController {
 
         Long savedId = diaryService.save(diaryDto, userId);
 
-        return "redirect:/diary/"+savedId;
+        // 요약 및 번역
+        String summary = clovaSummaryService.summarizeDiary(savedId);
+        String engSummary = papagoTranslationService.translateSummary(savedId);
+
+        diaryService.setSummary(savedId, summary, engSummary);
+
+        return "redirect:/diary/" + savedId;
     }
 
     @GetMapping("/{diary_id}")
@@ -73,19 +79,5 @@ public class DiaryController {
         headers.setContentLength(imageBytes.length);
 
         return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
-    }
-
-    @GetMapping("/{diary_id}/summary")
-    public ResponseEntity<?> summaryDiary(@PathVariable Long diary_id) {
-        String summary = clovaSummaryService.summarizeDiary(diary_id);
-
-        return new ResponseEntity<>(summary, HttpStatus.OK);
-    }
-
-    @GetMapping("/{diary_id}/translate")
-    public ResponseEntity<?> translateSummary(@PathVariable Long diary_id) {
-        String engSummary = papagoTranslationService.translateSummary(diary_id);
-
-        return new ResponseEntity<>(engSummary, HttpStatus.OK);
     }
 }
