@@ -5,11 +5,13 @@ import com.highfive.artary.dto.stablediffusion.StableDiffusionRequestDto;
 import com.highfive.artary.dto.stablediffusion.StableDiffusionResponseDto;
 import com.highfive.artary.repository.DiaryRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class StableDiffusionServiceImpl implements StableDiffusionService {
@@ -34,8 +36,7 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
         Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
 
-//        String prompt = diary.getSummary();
-        String prompt = "die-cut sticker, cute kawai goldendoodle character sticker, white background, illustration minimalism, vector, pastel colors, children's book, crayon style";
+        String prompt = diary.getSummary().getEngSummary();
 
         StableDiffusionRequestDto requestDto = StableDiffusionRequestDto.builder()
                 .key(key)

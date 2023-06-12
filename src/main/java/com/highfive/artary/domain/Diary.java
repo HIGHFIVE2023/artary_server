@@ -37,7 +37,8 @@ public class Diary extends BaseEntity{
     @NonNull
     private Emotion emotion;
 
-    @OneToOne(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "summary_id")
     private Summary summary;
 
     @JsonIgnore

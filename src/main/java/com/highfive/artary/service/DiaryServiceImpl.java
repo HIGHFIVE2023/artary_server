@@ -1,6 +1,7 @@
 package com.highfive.artary.service;
 
 import com.highfive.artary.domain.Diary;
+import com.highfive.artary.domain.Summary;
 import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.diary.DiaryRequestDto;
 import com.highfive.artary.dto.diary.DiaryResponseDto;
@@ -31,6 +32,24 @@ public class DiaryServiceImpl implements DiaryService {
                 new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
         return diaryRepository.save(requestDto.toEntity(user)).getId();
+    }
+
+    @Override
+    public void setSummary(Long diary_id, String koSummary, String engSummary) {
+        Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
+                new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+
+        Summary summary = diary.getSummary();
+        if (summary == null) {
+            summary = new Summary();
+            summary.setDiary(diary);
+        }
+
+        summary.setKoSummary(koSummary);
+        summary.setEngSummary(engSummary);
+
+        diary.setSummary(summary);
+        diaryRepository.save(diary);
     }
 
     @Override

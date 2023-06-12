@@ -73,6 +73,9 @@ public class ClovaSummaryServiceImpl implements ClovaSummaryService{
         summary.setKoSummary(getSummary);
         summaryRepository.save(summary);
 
+        diary.setSummary(summary);
+        diaryRepository.save(diary);
+
         return getSummary;
     }
 }

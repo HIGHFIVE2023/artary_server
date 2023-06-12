@@ -17,10 +17,7 @@ public class Summary extends BaseEntity{
     @Column(name = "sticker_id")
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @MapsId
-    @JoinColumn(name = "diary_id")
-    @NonNull
+    @OneToOne(mappedBy = "summary", fetch = FetchType.LAZY)
     private Diary diary;
 
     @Column(name = "korean")
