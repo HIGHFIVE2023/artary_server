@@ -1,23 +1,21 @@
 package com.highfive.artary.controller;
 
+import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.UserDto;
+import com.highfive.artary.repository.UserRepository;
+import com.highfive.artary.security.TokenProvider;
 import com.highfive.artary.service.MailService;
 import com.highfive.artary.service.UserService;
 
 import com.highfive.artary.validator.CheckEmailValidator;
 import com.highfive.artary.validator.CheckNicknameValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -27,12 +25,14 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 
 
 @RestController
+@Slf4j
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
@@ -41,7 +41,8 @@ public class UserController {
     private final MailService mailService;
     private final CheckNicknameValidator checkNicknameValidator;
     private final CheckEmailValidator checkEmailValidator;
-    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final TokenProvider tokenProvider;
 
     @PostMapping("/signup")
     @ResponseBody
@@ -82,23 +83,32 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserDto userDto) {
+    public ResponseEntity<?> login(@RequestBody Map<String, String> userDto) {
+        log.info("user email = {}", userDto.get("email"));
+        User member = userRepository.findByEmail(userDto.get("email"))
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
+
+        String token;
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userDto.getEmail(), userDto.getPassword())
-            );
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-            return ResponseEntity.ok(userDetails);
-        } catch (BadCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이메일 또는 비밀번호가 틀렸습니다.");
-        } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("인증 중에 오류가 발생했습니다.");
+            token = tokenProvider.createToken(member.getUsername());
+        } catch (Exception e) {
+            // 토큰 생성 중 오류가 발생한 경우
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error", "토큰 생성 중 오류가 발생했습니다."));
         }
-    }
 
+        UserDto responseDto = new UserDto();
+
+        responseDto.setToken(token);
+        responseDto.setName(member.getName());
+        responseDto.setNickname(member.getNickname());
+        responseDto.setPassword(member.getPassword());
+        responseDto.setEmail(member.getEmail());
+        responseDto.setAuth(member.getAuth());
+        responseDto.setImage(member.getImage());
+
+        return ResponseEntity.ok(responseDto);
+    }
 
     @GetMapping("/login")
     public String getUserInfo(@AuthenticationPrincipal Object principal) {

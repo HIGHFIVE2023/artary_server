@@ -10,6 +10,8 @@ import javax.validation.constraints.*;
 @AllArgsConstructor
 public class UserDto {
 
+    private String token;
+
     @NotNull(message="이름을 입력해주세요")
     private String name;
 
@@ -29,5 +31,7 @@ public class UserDto {
     private String auth="ROLE_USER";
 
     private String image;
+
+
 
 }

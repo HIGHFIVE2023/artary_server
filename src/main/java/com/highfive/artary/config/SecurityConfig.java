@@ -1,7 +1,9 @@
 package com.highfive.artary.config;
 
-import com.highfive.artary.security.Custom403Handler;
 import com.highfive.artary.config.auth.CustomOAuth2UserService;
+import com.highfive.artary.security.Custom403Handler;
+import com.highfive.artary.security.JwtAuthenticationFilter;
+import com.highfive.artary.security.TokenProvider;
 import com.highfive.artary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -13,11 +15,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,7 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private UserService userService;
 
     @Autowired
+    private TokenProvider tokenProvider;
+
+    @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -40,32 +49,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .httpBasic().disable()
                 .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
                 .authorizeRequests(request->
                         request.antMatchers("/", "/users/signup/**",
                                         "/users/login/**", "/users/email", "/users/password", "/oauth2/**").permitAll()
                                 .anyRequest().authenticated()
                 )
-                .formLogin(login->
-                        login.loginPage("/users/login")
-                                .loginProcessingUrl("/users/loginprocess")
-                                .usernameParameter("email")
-                                .passwordParameter("password")
-                                .permitAll()
-                                .defaultSuccessUrl("/", false)
-                                .failureUrl("/users/login-error")
-                )
-                .logout(logout->
-                        logout.logoutSuccessUrl("/"))
-                .exceptionHandling(error->
-                        error.accessDeniedHandler(accessDeniedHandler())
-                )
                 .oauth2Login(login ->
                         login
                                 .defaultSuccessUrl("http://localhost:3000/")
                                 .userInfoEndpoint()
-                                .userService(customOAuth2UserService)
-                );
-
+                                .userService(customOAuth2UserService).
+                                and()
+                                .redirectionEndpoint()
+                                .baseUri("/oauth2/callback/*")
+                )
+                .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
     }
 
@@ -107,7 +107,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-        
+
         return source;
     }
 

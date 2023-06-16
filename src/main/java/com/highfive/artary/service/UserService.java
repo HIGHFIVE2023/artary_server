@@ -52,7 +52,8 @@ public class UserService implements UserDetailsService {
                 .name(userDto.getName())
                 .nickname(userDto.getNickname())
                 .email(userDto.getEmail())
-                .auth(userDto.getAuth()).image(userDto.getImage())
+                .auth(userDto.getAuth())
+                .image(userDto.getImage())
                 .password(userDto.getPassword()).build()).getId();
     }
 
