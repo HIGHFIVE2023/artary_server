@@ -7,11 +7,15 @@ import com.highfive.artary.dto.sticker.StickerResponseDto;
 import com.highfive.artary.service.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -24,23 +28,29 @@ import java.util.List;
 @RequestMapping("diary")
 public class DiaryController {
 
+    @Autowired
+    private final UserService userService;
+    @Autowired
     private final DiaryService diaryService;
+    @Autowired
     private final StickerService stickerService;
+    @Autowired
     private final StableDiffusionService stablediffusionService;
+    @Autowired
     private final ClovaSummaryService clovaSummaryService;
+    @Autowired
     private final PapagoTranslationService papagoTranslationService;
 
     @PostMapping("/write")
-    public String saveDiary(@Validated @RequestBody DiaryRequestDto diaryDto, @AuthenticationPrincipal User user) {
-        Long userId = user.getId();
+    public String saveDiary(@Validated @RequestBody DiaryRequestDto diaryDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            // 사용자가 인증되지 않은 경우 처리
+        }
+        UserDetails userDetails = userService.loadUserByUsername(authentication.getName());
+        Long userId = ((User) userDetails).getId();
 
         Long savedId = diaryService.save(diaryDto, userId);
-
-        // 요약 및 번역
-        String summary = clovaSummaryService.summarizeDiary(savedId);
-        String engSummary = papagoTranslationService.translateSummary(savedId);
-
-        diaryService.setSummary(savedId, summary, engSummary);
 
         return "redirect:/diary/" + savedId;
     }
@@ -73,6 +83,12 @@ public class DiaryController {
 
     @GetMapping("/{diary_id}/picture")
     public ResponseEntity<byte[]> getPicture(@PathVariable Long diary_id) {
+        // 요약 및 번역
+        String summary = clovaSummaryService.summarizeDiary(diary_id);
+        String engSummary = papagoTranslationService.translateSummary(diary_id);
+
+        diaryService.setSummary(diary_id, summary, engSummary);
+
         byte[] imageBytes = stablediffusionService.getTextToImage(diary_id);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_PNG);
