@@ -32,7 +32,7 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
             .build();
 
     @Override
-    public byte[] getTextToImage(Long diary_id) {
+    public String getTextToImage(Long diary_id) {
         Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
 
@@ -66,7 +66,7 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
         diary.setImage(imageUrl);
         diaryRepository.save(diary);
 
-        return imageBytes;
+        return imageUrl;
     }
 
 }

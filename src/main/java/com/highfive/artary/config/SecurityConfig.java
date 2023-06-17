@@ -58,19 +58,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .antMatchers("/auth/**").permitAll()
                                 .antMatchers("/", "/users/signup/**",
                                         "/users/login/**", "/users/email", "/users/password", "/oauth2/**").permitAll()
-                                .antMatchers("/login/kakao").permitAll()
-                                .antMatchers("/diary/**").permitAll()
                                 .anyRequest().authenticated()
                 )
-//                .oauth2Login(login ->
-//                        login
-//                                .defaultSuccessUrl("http://localhost:3000/")
-//                                .userInfoEndpoint()
-//                                .userService(customOAuth2UserService).
-//                                and()
-//                                .redirectionEndpoint()
-//                                .baseUri("/oauth2/callback/*")
-//                )
+                .oauth2Login(login ->
+                        login
+                                .defaultSuccessUrl("http://localhost:3000/")
+                                .userInfoEndpoint()
+                                .userService(customOAuth2UserService).
+                                and()
+                                .redirectionEndpoint()
+                                .baseUri("/oauth2/callback/*")
+                )
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
     }

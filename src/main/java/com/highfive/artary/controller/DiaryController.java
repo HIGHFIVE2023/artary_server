@@ -75,18 +75,16 @@ public class DiaryController {
     }
 
     @GetMapping("/{diary_id}/picture")
-    public ResponseEntity<byte[]> getPicture(@PathVariable Long diary_id) {
+    public ResponseEntity<?> getPicture(@PathVariable Long diary_id) {
         // 요약 및 번역
         String summary = clovaSummaryService.summarizeDiary(diary_id);
         String engSummary = papagoTranslationService.translateSummary(diary_id);
 
         diaryService.setSummary(diary_id, summary, engSummary);
 
-        byte[] imageBytes = stablediffusionService.getTextToImage(diary_id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
-        headers.setContentLength(imageBytes.length);
+        String imageUrl = stablediffusionService.getTextToImage(diary_id);
 
-        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
+
+        return new ResponseEntity<>(imageUrl, HttpStatus.OK);
     }
 }
