@@ -36,7 +36,7 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
         Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
 
-        String prompt = diary.getSummary().getEngSummary();
+        String prompt = "water color painting of \'" + diary.getSummary().getEngSummary() + "\', minimalism, vaporwave aesthetic, Cute";;
 
         StableDiffusionRequestDto requestDto = StableDiffusionRequestDto.builder()
                 .key(key)
