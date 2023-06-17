@@ -12,7 +12,7 @@ public interface DiaryService {
     DiaryResponseDto getById(Long diary_id);
 
     // 일기 저장
-    Long save(DiaryRequestDto requestDto, Long user_id);
+    Long save(DiaryRequestDto requestDto, String email);
 
     // 일기 요약 & 번역
     void setSummary(Long diary_id, String koSummary, String engSummary);

@@ -42,15 +42,8 @@ public class DiaryController {
     private final PapagoTranslationService papagoTranslationService;
 
     @PostMapping("/write")
-    public String saveDiary(@Validated @RequestBody DiaryRequestDto diaryDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !authentication.isAuthenticated()) {
-            // 사용자가 인증되지 않은 경우 처리
-        }
-        UserDetails userDetails = userService.loadUserByUsername(authentication.getName());
-        Long userId = ((User) userDetails).getId();
-
-        Long savedId = diaryService.save(diaryDto, userId);
+    public String saveDiary(@Validated @RequestBody DiaryRequestDto diaryDto, @AuthenticationPrincipal String email) {
+        Long savedId = diaryService.save(diaryDto, email);
 
         return "redirect:/diary/" + savedId;
     }

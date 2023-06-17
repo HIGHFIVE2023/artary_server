@@ -27,8 +27,8 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public Long save(DiaryRequestDto requestDto, Long user_id) {
-        User user = userRepository.findById(user_id).orElseThrow(() ->
+    public Long save(DiaryRequestDto requestDto, String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
                 new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
         return diaryRepository.save(requestDto.toEntity(user)).getId();
