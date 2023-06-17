@@ -8,6 +8,7 @@ import com.highfive.artary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -29,7 +30,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
+@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -60,15 +61,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         "/users/login/**", "/users/email", "/users/password", "/oauth2/**").permitAll()
                                 .anyRequest().authenticated()
                 )
-//                .oauth2Login(login ->
-//                        login
-//                                .defaultSuccessUrl("http://localhost:3000/")
-//                                .userInfoEndpoint()
-//                                .userService(customOAuth2UserService).
-//                                and()
-//                                .redirectionEndpoint()
-//                                .baseUri("/oauth2/callback/*")
-//                )
+                .oauth2Login(login ->
+                        login
+                                .defaultSuccessUrl("http://localhost:3000/")
+                                .userInfoEndpoint()
+                                .userService(customOAuth2UserService)
+                )
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
     }

@@ -29,7 +29,6 @@ public class User extends BaseEntity implements UserDetails{
     private String name;
 
     @NonNull
-    @Column(unique = true)
     private String nickname;
 
     @NonNull
