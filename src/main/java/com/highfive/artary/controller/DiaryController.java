@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -78,17 +79,45 @@ public class DiaryController {
 
     @GetMapping("/{diary_id}/picture")
     public ResponseEntity<?> getPicture(@PathVariable Long diary_id) {
-        // 요약 및 번역
-        String summary = clovaSummaryService.summarizeDiary(diary_id);
-        String engSummary = papagoTranslationService.translateSummary(diary_id);
+        int maxAttempts = 3; // 최대 재시도 횟수
+        int attempts = 0;
 
-        diaryService.setSummary(diary_id, summary, engSummary);
+        while (attempts < maxAttempts) {
+            try {
+                // 요약 및 번역
+                String summary = clovaSummaryService.summarizeDiary(diary_id);
+                String engSummary = papagoTranslationService.translateSummary(diary_id);
 
-        String imageUrl = stablediffusionService.getTextToImage(diary_id);
+                diaryService.setSummary(diary_id, summary, engSummary);
 
-        Map<String, Object> response = new HashMap<>();
-        response.put("imageUrl", imageUrl);
+                String imageUrl = stablediffusionService.getTextToImage(diary_id);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                Map<String, Object> response = new HashMap<>();
+                response.put("imageUrl", imageUrl);
+
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } catch (WebClientRequestException e) {
+                // 재시도 로직을 위해 예외 처리
+                attempts++;
+                if (attempts >= maxAttempts) {
+                    // 최대 재시도 횟수를 초과한 경우
+                    return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+                // 일시적인 연결 문제로 예외가 발생한 경우, 대기 후 재시도
+                try {
+                    Thread.sleep(1000); // 1초 대기 후 재시도
+                } catch (InterruptedException ex) {
+                    // 대기 도중 인터럽트가 발생한 경우 예외 처리
+                    Thread.currentThread().interrupt();
+                    return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } catch (Exception e) {
+                // 다른 예외가 발생한 경우
+                return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        // 최대 재시도 횟수를 초과한 경우
+        return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
