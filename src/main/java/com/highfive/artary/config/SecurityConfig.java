@@ -1,6 +1,7 @@
 package com.highfive.artary.config;
 
 import com.highfive.artary.config.auth.CustomOAuth2UserService;
+import com.highfive.artary.config.auth.OAuthSuccessHandler;
 import com.highfive.artary.security.Custom403Handler;
 import com.highfive.artary.security.JwtAuthenticationFilter;
 import com.highfive.artary.security.TokenProvider;
@@ -20,14 +21,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Configuration
@@ -43,6 +43,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
+
+    @Autowired
+    private OAuthSuccessHandler oAuthSuccessHandler;
+
 
 
     @Override
@@ -62,11 +66,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .anyRequest().authenticated()
                 )
                 .oauth2Login(login ->
-                        login
-                                .defaultSuccessUrl("http://localhost:3000/")
-                                .userInfoEndpoint()
+                        login.userInfoEndpoint()
                                 .userService(customOAuth2UserService)
+                                .and()
+                                .successHandler(oAuthSuccessHandler)
                 )
+                .exceptionHandling()
+                    .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
+                .and()
                 .addFilterBefore(new JwtAuthenticationFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
 
     }
@@ -76,7 +83,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userService)
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
-
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler(){
