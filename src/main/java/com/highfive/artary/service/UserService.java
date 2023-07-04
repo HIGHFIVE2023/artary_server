@@ -5,14 +5,17 @@ import com.highfive.artary.dto.UserDto;
 import com.highfive.artary.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Slf4j
@@ -66,5 +69,35 @@ public class UserService implements UserDetailsService {
         boolean nicknameDuplicate = userRepository.existsByNickname(nickname);
         return nicknameDuplicate;
     }
+
+    public Optional<String> findEmail(String name, String nickname){
+        Optional<User> result = userRepository.findByNameAndNickname(name, nickname);
+        return result.map(User::getEmail);
+    }
+
+    public void updateUser(Long userId, UserDto userDto) {
+        try {
+            User existingUser = userRepository.findById(userId).orElseThrow();
+            existingUser.setNickname(userDto.getNickname());
+            existingUser.setImage(userDto.getImage());
+
+            if (!userDto.getPassword().equals(existingUser.getPassword())) {
+                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+                String encryptedPassword = passwordEncoder.encode(userDto.getPassword());
+                existingUser.setPassword(encryptedPassword);
+            }
+
+            existingUser.setUpdatedAt(LocalDateTime.now());
+
+            userRepository.save(existingUser);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.", e);
+        }
+    }
+
+    public void deleteById(Long userId){
+        userRepository.deleteById(userId);
+    }
+
 
 }
