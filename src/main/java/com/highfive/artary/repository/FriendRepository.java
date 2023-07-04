@@ -11,4 +11,6 @@ public interface FriendRepository extends JpaRepository<Friend, FriendId> {
 
     List<Friend> findAllByFromUserIdAndAreWeFriendOrToUserIdAndAreWeFriend(User fromUser, Boolean areWeFriend1, User toUser, Boolean areWeFriend2);
     List<Friend> findAllByFromUserIdAndToUserIdAndAreWeFriend(User fromUser, User toUser, Boolean areWeFriend);
+
+    List<Friend> findAllByToUserIdAndAreWeFriend(User toUser, Boolean areWeFriend);
 }

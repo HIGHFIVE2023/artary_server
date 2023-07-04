@@ -24,6 +24,7 @@ public class FriendController {
 
     private final UserRepository userRepository;
 
+    // 친구 목록 조회
     @GetMapping
     public ResponseEntity<?> getFriendsList(@AuthenticationPrincipal String email) {
         Long userId = findIdByEmail(email);
@@ -33,6 +34,17 @@ public class FriendController {
         return new ResponseEntity<>(friendDtoList, HttpStatus.OK);
     }
 
+    // 친구 요청 목록
+    @GetMapping("/requests")
+    public ResponseEntity<?> getFriendsRequests(@AuthenticationPrincipal String email) {
+        Long userId = findIdByEmail(email);
+
+        List<FriendDto> friendDtoList = friendService.getRequests(userId);
+
+        return new ResponseEntity<>(friendDtoList, HttpStatus.OK);
+    }
+
+    // 친구 검색 (이메일로)
     @GetMapping("/search/{email}")
     public ResponseEntity<?> searchFriend(@PathVariable String email) {
         User searchFriend = friendService.searchFriend(email);
@@ -40,6 +52,7 @@ public class FriendController {
         return new ResponseEntity<>(searchFriend, HttpStatus.OK);
     }
 
+    // 친구 추가
     @PostMapping("/{friend_email}")
     public ResponseEntity addFriend(@PathVariable String friend_email, @AuthenticationPrincipal String email) {
         Long toUserId = findIdByEmail(friend_email);
@@ -50,6 +63,7 @@ public class FriendController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // 친구 요청 응답 (수락 or 거절)
     @PostMapping("/{friend_email}/{are_we_friend}")
     public ResponseEntity replyFriendRequest(@PathVariable String friend_email, @PathVariable Boolean are_we_friend, @AuthenticationPrincipal String email) {
         Long toUserId = findIdByEmail(friend_email);
@@ -60,6 +74,7 @@ public class FriendController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    // 친구 삭제
     @DeleteMapping("/{friend_email}")
     public ResponseEntity deleteFriend(@PathVariable String friend_email, @AuthenticationPrincipal String email) {
         Long toUserId = findIdByEmail(friend_email);
