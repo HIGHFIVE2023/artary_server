@@ -11,6 +11,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -24,6 +27,22 @@ public class DiaryServiceImpl implements DiaryService {
                 new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
 
         return new DiaryResponseDto(diary);
+    }
+
+    @Override
+    public List<DiaryResponseDto> getDiaries(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() ->
+                new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+
+        List<Diary> diaries = user.getDiaries();
+        List<DiaryResponseDto> diaryResponseDtos = new ArrayList<>();
+
+        for (Diary diary : diaries) {
+            DiaryResponseDto diaryResponseDto = new DiaryResponseDto(diary);
+            diaryResponseDtos.add(diaryResponseDto);
+        }
+
+        return diaryResponseDtos;
     }
 
     @Override

@@ -1,15 +1,15 @@
 package com.highfive.artary.service;
 
-import com.highfive.artary.domain.Diary;
-import com.highfive.artary.domain.Emotion;
-import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.diary.DiaryRequestDto;
 import com.highfive.artary.dto.diary.DiaryResponseDto;
-import com.highfive.artary.repository.DiaryRepository;
+
+import java.util.List;
 
 public interface DiaryService {
 
     DiaryResponseDto getById(Long diary_id);
+
+    List<DiaryResponseDto> getDiaries(String email);
 
     // 일기 저장
     Long save(DiaryRequestDto requestDto, String email);

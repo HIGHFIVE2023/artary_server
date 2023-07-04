@@ -62,6 +62,13 @@ public class DiaryController {
         return new ResponseEntity<>(diaryService.getById(diary_id), HttpStatus.OK);
     }
 
+    @GetMapping("/diaries")
+    public ResponseEntity<?> getDiaries(@AuthenticationPrincipal String email) {
+        List<DiaryResponseDto> diaryResponseDtos = diaryService.getDiaries(email);
+
+        return new ResponseEntity<>(diaryResponseDtos, HttpStatus.OK);
+    }
+
     @PutMapping("/{diary_id}")
     public ResponseEntity updateDiary(@RequestBody DiaryRequestDto diaryDto, @PathVariable Long diary_id, User user) {
         Long userId = user.getId();
