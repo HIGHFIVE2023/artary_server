@@ -1,5 +1,6 @@
 package com.highfive.artary.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.Check;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,12 +22,14 @@ public class Friend {
     @EmbeddedId
     private FriendId id;
 
+    @JsonIgnore
     @MapsId("toUserId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "to_user_id")
     @NonNull
     private User toUserId;
 
+    @JsonIgnore
     @MapsId("fromUserId")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "from_user_id")
