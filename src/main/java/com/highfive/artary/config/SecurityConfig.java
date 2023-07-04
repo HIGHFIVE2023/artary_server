@@ -1,7 +1,5 @@
 package com.highfive.artary.config;
 
-import com.highfive.artary.config.auth.CustomOAuth2UserService;
-import com.highfive.artary.config.auth.OAuthSuccessHandler;
 import com.highfive.artary.security.Custom403Handler;
 import com.highfive.artary.security.JwtAuthenticationFilter;
 import com.highfive.artary.security.TokenProvider;
@@ -41,14 +39,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private TokenProvider tokenProvider;
 
-    @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
-
-    @Autowired
-    private OAuthSuccessHandler oAuthSuccessHandler;
-
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.headers().frameOptions().sameOrigin();
@@ -64,12 +54,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .antMatchers("/", "/users/signup/**",
                                         "/users/login/**", "/users/email", "/users/password", "/oauth2/**").permitAll()
                                 .anyRequest().authenticated()
-                )
-                .oauth2Login(login ->
-                        login.userInfoEndpoint()
-                                .userService(customOAuth2UserService)
-                                .and()
-                                .successHandler(oAuthSuccessHandler)
                 )
                 .exceptionHandling()
                     .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
