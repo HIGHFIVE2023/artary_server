@@ -14,6 +14,9 @@ public interface FriendService {
     // 친구 목록 조회
     List<FriendDto> findAll(Long user_id);
 
+    // 친구 요청 조회
+    List<FriendDto> getRequests(Long user_id);
+
     // 친구 추가
     void addFriend(Long fromUserId, Long toUserId);
 

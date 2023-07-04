@@ -34,9 +34,23 @@ public class FriendServiceImpl implements FriendService {
     @Override
     public List<FriendDto> findAll(Long user_id) {
         List<FriendDto> friendDtos = new ArrayList<>();
-        User user = userRepository.findById(user_id).orElseThrow(() ->
-                new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+        User user = findUserById(user_id);
         List<Friend> friends = friendRepository.findAllByFromUserIdAndAreWeFriendOrToUserIdAndAreWeFriend(user, true, user, true);
+
+        for (Friend friend : friends) {
+            FriendDto friendDto = new FriendDto(friend);
+            friendDtos.add(friendDto);
+        }
+
+        return friendDtos;
+    }
+
+    @Override
+    public List<FriendDto> getRequests(Long user_id) {
+        List<FriendDto> friendDtos = new ArrayList<>();
+        User user = findUserById(user_id);
+
+        List<Friend> friends = friendRepository.findAllByToUserIdAndAreWeFriend(user, false);
 
         for (Friend friend : friends) {
             FriendDto friendDto = new FriendDto(friend);
@@ -52,10 +66,8 @@ public class FriendServiceImpl implements FriendService {
             throw new IllegalArgumentException("자기 자신한테는 친구 신청이 안됨.");
         }
 
-        User fromUser = userRepository.findById(fromUserId).orElseThrow(() ->
-                new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
-        User toUser = userRepository.findById(toUserId).orElseThrow(() ->
-                new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+        User fromUser = findUserById(fromUserId);
+        User toUser = findUserById(toUserId);
 
         List<Friend> friends = friendRepository.findAllByFromUserIdAndToUserIdAndAreWeFriend(fromUser, toUser, true);
         if (!friends.isEmpty()) {
@@ -99,5 +111,12 @@ public class FriendServiceImpl implements FriendService {
                 new IllegalArgumentException("해당 친구가 존재하지 않습니다."));
 
         friendRepository.delete(friend);
+    }
+
+    private User findUserById(Long user_id) {
+        User user = userRepository.findById(user_id).orElseThrow(() ->
+                new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+
+        return user;
     }
 }
