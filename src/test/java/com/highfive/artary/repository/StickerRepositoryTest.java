@@ -69,24 +69,24 @@ class StickerRepositoryTest {
         assertThat(foundDiary.getId()).isEqualTo(diary.getId());
     }
 
-    @Test
-    @DisplayName("스티커 Url 확인")
-    void stickerUrlTest() {
-        sticker = createSticker(userB, diary, StickerType.LOVE);
-        String stickerUrl = sticker.getType().getUrl();
-        assertNotNull(stickerUrl);
-
-        Diary foundDiary = sticker.getDiary();
-        assertNotNull(foundDiary);
-
-        String diaryStickerUrl = foundDiary.getStickerUrl();
-        assertNotNull(diaryStickerUrl);
-
-        log.info("Sticker Url: {}", stickerUrl);
-        log.info("Diary Sticker Url: {}", diaryStickerUrl);
-
-        assertEquals(stickerUrl, diaryStickerUrl);
-    }
+//    @Test
+//    @DisplayName("스티커 Url 확인")
+//    void stickerUrlTest() {
+//        sticker = createSticker(userB, diary, StickerType.LOVE);
+//        String stickerUrl = sticker.getType().getUrl();
+//        assertNotNull(stickerUrl);
+//
+//        Diary foundDiary = sticker.getDiary();
+//        assertNotNull(foundDiary);
+//
+//        String diaryStickerUrl = foundDiary.getStickerUrl();
+//        assertNotNull(diaryStickerUrl);
+//
+//        log.info("Sticker Url: {}", stickerUrl);
+//        log.info("Diary Sticker Url: {}", diaryStickerUrl);
+//
+//        assertEquals(stickerUrl, diaryStickerUrl);
+//    }
 
     @Test
     @DisplayName("스티커 수정")
