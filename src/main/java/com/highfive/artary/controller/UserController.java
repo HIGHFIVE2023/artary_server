@@ -72,6 +72,7 @@ public class UserController {
         return mailService.sendSimpleMessage(email);
     }
 
+    // 이메일 찾기
     @PostMapping("/email")
     public ResponseEntity<String> findEmail(@RequestParam String name, @RequestParam String nickname){
         Optional<String> result = userService.findEmail(name, nickname);
@@ -79,6 +80,7 @@ public class UserController {
 
     }
 
+    // 회원 탈퇴
     @DeleteMapping("/delete/{userId}")
     public ResponseEntity<String> deleteUserById(@PathVariable Long userId) {
         try {
@@ -96,17 +98,16 @@ public class UserController {
         binder.addValidators(checkEmailValidator);
     }
 
-    //로그인 로직 수정해야함
+    // 로그인
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> userDto) {
         String email = userDto.get("email");
         String password = userDto.get("password");
 
-
         User member = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
 
-        if (password.equals(member.getPassword())) {
+        if (!password.equals(member.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Collections.singletonMap("error", "비밀번호가 일치하지 않습니다."));
         }
