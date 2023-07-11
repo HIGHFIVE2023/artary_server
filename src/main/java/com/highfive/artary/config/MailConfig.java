@@ -45,4 +45,3 @@ public class MailConfig {
         return properties;
     }
 }
-

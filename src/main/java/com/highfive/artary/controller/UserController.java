@@ -13,10 +13,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -40,11 +40,11 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
-    private final MailService mailService;
     private final CheckNicknameValidator checkNicknameValidator;
     private final CheckEmailValidator checkEmailValidator;
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
+    private final MailService mailService;
 
     @PostMapping("/signup")
     @ResponseBody
@@ -99,28 +99,36 @@ public class UserController {
     //로그인 로직 수정해야함
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> userDto) {
-        User member = userRepository.findByEmail(userDto.get("email"))
+        String email = userDto.get("email");
+        String password = userDto.get("password");
+
+
+        User member = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
 
-        String token;
+        if (password.equals(member.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Collections.singletonMap("error", "비밀번호가 일치하지 않습니다."));
+        }
+
         try {
-            token = tokenProvider.createToken(member.getUsername());
+            String token = tokenProvider.createToken(member.getUsername());
+
+            UserDto responseDto = new UserDto();
+            responseDto.setToken(token);
+            responseDto.setName(member.getName());
+            responseDto.setNickname(member.getNickname());
+            responseDto.setEmail(member.getEmail());
+            responseDto.setAuth(member.getAuth());
+            responseDto.setImage(member.getImage());
+
+            return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("error", "토큰 생성 중 오류가 발생했습니다."));
         }
-
-        UserDto responseDto = new UserDto();
-        responseDto.setToken(token);
-        responseDto.setName(member.getName());
-        responseDto.setNickname(member.getNickname());
-        responseDto.setPassword(member.getPassword());
-        responseDto.setEmail(member.getEmail());
-        responseDto.setAuth(member.getAuth());
-        responseDto.setImage(member.getImage());
-
-        return ResponseEntity.ok(responseDto);
     }
+
 
     @GetMapping("/login")
     public String getUserInfo(@AuthenticationPrincipal Object principal) {

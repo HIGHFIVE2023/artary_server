@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         request.antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
                                 .antMatchers("/auth/**").permitAll()
                                 .antMatchers("/", "/users/signup/**",
-                                        "/users/login/**", "/users/email", "/users/password", "/oauth2/**").permitAll()
+                                        "/users/login/**", "/users/email", "/users/password/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .exceptionHandling()
@@ -64,8 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService)
-                .passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userService);
     }
 
     @Bean
@@ -83,11 +82,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ;
     }
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {

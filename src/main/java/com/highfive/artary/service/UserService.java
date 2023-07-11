@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -34,9 +35,6 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email)
                 .orElseThrow(()-> new UsernameNotFoundException(email));
     }
-    public Optional<User> getByCredentials(final String email, final String password){
-        return userRepository.findByEmailAndPassword(email, password);
-    }
 
     public User save(User user) throws DataIntegrityViolationException {
         if(user.getId() == null){
@@ -47,9 +45,6 @@ public class UserService implements UserDetailsService {
     }
 
     public Long save(UserDto userDto) throws Exception{
-
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        userDto.setPassword(encoder.encode(userDto.getPassword()));
 
         return userRepository.save(User.builder()
                 .name(userDto.getName())
@@ -77,16 +72,11 @@ public class UserService implements UserDetailsService {
 
     public void updateUser(Long userId, UserDto userDto) {
         try {
+
             User existingUser = userRepository.findById(userId).orElseThrow();
             existingUser.setNickname(userDto.getNickname());
             existingUser.setImage(userDto.getImage());
-
-            if (!userDto.getPassword().equals(existingUser.getPassword())) {
-                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                String encryptedPassword = passwordEncoder.encode(userDto.getPassword());
-                existingUser.setPassword(encryptedPassword);
-            }
-
+            existingUser.setPassword(userDto.getPassword());
             existingUser.setUpdatedAt(LocalDateTime.now());
 
             userRepository.save(existingUser);
@@ -98,6 +88,5 @@ public class UserService implements UserDetailsService {
     public void deleteById(Long userId){
         userRepository.deleteById(userId);
     }
-
 
 }
