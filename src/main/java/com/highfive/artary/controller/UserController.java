@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -45,6 +46,8 @@ public class UserController {
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
     private final MailService mailService;
+    private final PasswordEncoder passwordEncoder;
+
 
     @PostMapping("/signup")
     @ResponseBody
@@ -107,7 +110,7 @@ public class UserController {
         User member = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 E-MAIL 입니다."));
 
-        if (!password.equals(member.getPassword())) {
+        if (!passwordEncoder.matches(password, member.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Collections.singletonMap("error", "비밀번호가 일치하지 않습니다."));
         }

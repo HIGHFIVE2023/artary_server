@@ -4,6 +4,7 @@ import com.highfive.artary.repository.UserRepository;
 import com.highfive.artary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class WithUserTest {
 
@@ -21,11 +22,9 @@ public class WithUserTest {
         prepared = true;
 
         this.userRepository.deleteAll();
-        this.userService = new UserService(userRepository);
+//       this.userService = new UserService(userRepository);
         this.userTestHelper = new UserTestHelper(userService, NoOpPasswordEncoder.getInstance());
 
     }
-
-
 
 }

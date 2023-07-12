@@ -4,6 +4,7 @@ import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.UserDto;
 import com.highfive.artary.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.aspectj.weaver.bcel.BcelAnnotation;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,13 +47,16 @@ public class UserService implements UserDetailsService {
 
     public Long save(UserDto userDto) throws Exception{
 
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodedPassword = encoder.encode(userDto.getPassword());
+
         return userRepository.save(User.builder()
                 .name(userDto.getName())
                 .nickname(userDto.getNickname())
                 .email(userDto.getEmail())
                 .auth(userDto.getAuth())
                 .image(userDto.getImage())
-                .password(userDto.getPassword()).build()).getId();
+                .password(encodedPassword).build()).getId();
     }
 
     public boolean checkEmailDuplication(String email) {
@@ -72,11 +76,12 @@ public class UserService implements UserDetailsService {
 
     public void updateUser(Long userId, UserDto userDto) {
         try {
+            PasswordEncoder encoder = new BCryptPasswordEncoder();
 
             User existingUser = userRepository.findById(userId).orElseThrow();
             existingUser.setNickname(userDto.getNickname());
             existingUser.setImage(userDto.getImage());
-            existingUser.setPassword(userDto.getPassword());
+            existingUser.setPassword(encoder.encode(userDto.getPassword()));
             existingUser.setUpdatedAt(LocalDateTime.now());
 
             userRepository.save(existingUser);
