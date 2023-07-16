@@ -123,6 +123,7 @@ public class UserController {
 
             UserDto responseDto = new UserDto();
             responseDto.setToken(token);
+            responseDto.setUserId(member.getId());
             responseDto.setName(member.getName());
             responseDto.setNickname(member.getNickname());
             responseDto.setEmail(member.getEmail());

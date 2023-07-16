@@ -125,6 +125,6 @@ public class DiaryController {
         }
 
         // 최대 재시도 횟수를 초과한 경우
-        return new ResponseEntity<>("Failed to get the picture3.", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

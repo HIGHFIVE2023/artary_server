@@ -70,7 +70,8 @@ public class User extends BaseEntity implements UserDetails{
     }
 
     @Builder
-    public User(String name, String nickname, String password, String email, String auth, String image) {
+    public User(Long id, String name, String nickname, String password, String email, String auth, String image) {
+        this.id = id;
         this.name = name;
         this.nickname = nickname;
         this.password = password;
