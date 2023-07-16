@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -39,5 +40,6 @@ class UserServiceTest extends WithUserTest {
         User savedUser = (User) userService.loadUserByUsername("user1@test.com");
         userTestHelper.assertUser(savedUser, "user1");
     }
+
 
 }

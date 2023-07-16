@@ -10,7 +10,6 @@ import com.highfive.artary.service.UserService;
 import com.highfive.artary.validator.CheckEmailValidator;
 import com.highfive.artary.validator.CheckNicknameValidator;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -35,7 +34,6 @@ import java.util.Optional;
 
 
 @RestController
-@Slf4j
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
@@ -85,8 +83,13 @@ public class UserController {
 
     // 회원 탈퇴
     @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<String> deleteUserById(@PathVariable Long userId) {
+    public ResponseEntity<String> deleteUserById(@PathVariable Long userId, @RequestParam String password) {
         try {
+            boolean passwordMatches = userService.checkPassword(userId, password);
+
+            if(!passwordMatches){
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
+            }
             userService.deleteById(userId);
             return ResponseEntity.ok( "회원 탈퇴 성공");
         } catch (Exception e) {
