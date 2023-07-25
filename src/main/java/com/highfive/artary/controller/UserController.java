@@ -88,12 +88,12 @@ public class UserController {
             boolean passwordMatches = userService.checkPassword(userId, password);
 
             if(!passwordMatches){
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"비밀번호가 일치하지 않습니다.\"}");
             }
             userService.deleteById(userId);
             return ResponseEntity.ok().body("{\"message\": \"회원 탈퇴 성공\"}");
         } catch (Exception e) {
-            return ResponseEntity.ok().body("{\"message\": \"회원 탈퇴 실패\"}");
+            return ResponseEntity.badRequest().body("{\"message\": \"회원 탈퇴 실패\"}");
         }
     }
 
