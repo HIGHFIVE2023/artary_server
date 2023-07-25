@@ -81,7 +81,7 @@ public class DiaryController {
     public ResponseEntity deleteDiary(@PathVariable Long diary_id) {
         diaryService.delete(diary_id);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body("{\"message\": \"삭제 성공\"}");
     }
 
     @GetMapping("/{diary_id}/picture")
