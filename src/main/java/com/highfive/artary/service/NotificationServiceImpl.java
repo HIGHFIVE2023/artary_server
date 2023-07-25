@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -74,9 +76,9 @@ public class NotificationServiceImpl implements NotificationService {
     public void send(User user, NotificationType notificationType, String content, String url) {
         Notification notification = notificationRepository.save(createNotification(user, notificationType, content, url));
 
-        String reciverEmail = user.getEmail();
+        String receiverEmail = user.getEmail();
         String userId = new Long(user.getId()).toString();
-        String eventId = reciverEmail + "_" + System.currentTimeMillis();
+        String eventId = receiverEmail + "_" + System.currentTimeMillis();
         Map<String, SseEmitter> emitters = emitterRepository.findAllEmitterStartWithByUserId(userId);
         emitters.forEach(
                 (key, emitter) -> {
@@ -94,5 +96,39 @@ public class NotificationServiceImpl implements NotificationService {
                 .url(url)
                 .checked(false)
                 .build();
+    }
+
+    // 알림 리스트
+    @Override
+    public List<NotificationDto> getNotifications(Long userId) {
+        List<NotificationDto> notificationDtos = new ArrayList<>();
+
+        List<Notification> notifications = notificationRepository.findAllByUserIdAndChecked(userId, false);
+
+        for (Notification notification : notifications) {
+            NotificationDto notificationDto = new NotificationDto(notification);
+            notificationDtos.add(notificationDto);
+        }
+
+        return notificationDtos;
+    }
+
+    // 알림 읽음
+    @Override
+    public void checkNotification(Long alarmId) {
+        Notification notification = notificationRepository.findById(alarmId).orElseThrow(() ->
+                new IllegalArgumentException("해당 알림이 존재하지 않습니다."));
+
+        notification.setChecked(true);
+        notificationRepository.save(notification);
+    }
+
+    // 알림 삭제
+    @Override
+    public void deleteNotification(Long alarmId) {
+        Notification notification = notificationRepository.findById(alarmId).orElseThrow(() ->
+                new IllegalArgumentException("해당 알림이 존재하지 않습니다."));
+
+        notificationRepository.delete(notification);
     }
 }
