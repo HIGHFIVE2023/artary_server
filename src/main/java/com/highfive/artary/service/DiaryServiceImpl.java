@@ -1,10 +1,12 @@
 package com.highfive.artary.service;
 
 import com.highfive.artary.domain.Diary;
+import com.highfive.artary.domain.Sticker;
 import com.highfive.artary.domain.Summary;
 import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.diary.DiaryRequestDto;
 import com.highfive.artary.dto.diary.DiaryResponseDto;
+import com.highfive.artary.dto.sticker.StickerResponseDto;
 import com.highfive.artary.repository.DiaryRepository;
 import com.highfive.artary.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +45,22 @@ public class DiaryServiceImpl implements DiaryService {
         }
 
         return diaryResponseDtos;
+    }
+
+    @Override
+    public List<StickerResponseDto> getStickers(Long diaryId) {
+        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() ->
+                new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
+
+        List<Sticker> stickers = diary.getStickers();
+        List<StickerResponseDto> stickerResponseDtos = new ArrayList<>();
+
+        for (Sticker sticker : stickers) {
+            StickerResponseDto stickerResponseDto = new StickerResponseDto(sticker);
+            stickerResponseDtos.add(stickerResponseDto);
+        }
+
+        return stickerResponseDtos;
     }
 
     @Override

@@ -69,6 +69,13 @@ public class DiaryController {
         return new ResponseEntity<>(diaryResponseDtos, HttpStatus.OK);
     }
 
+    @GetMapping("/{diary_id}/stickers")
+    public ResponseEntity<?> getStickers(@PathVariable Long diary_id) {
+        List<StickerResponseDto> stickerResponseDtos = diaryService.getStickers(diary_id);
+
+        return new ResponseEntity<>(stickerResponseDtos, HttpStatus.OK);
+    }
+
     @PutMapping("/{diary_id}")
     public ResponseEntity updateDiary(@RequestBody DiaryRequestDto diaryDto, @PathVariable Long diary_id, User user) {
         Long userId = user.getId();
