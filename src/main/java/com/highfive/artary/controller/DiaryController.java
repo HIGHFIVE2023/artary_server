@@ -1,21 +1,19 @@
 package com.highfive.artary.controller;
 
+import com.highfive.artary.domain.FirstSentence;
 import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.diary.DiaryRequestDto;
 import com.highfive.artary.dto.diary.DiaryResponseDto;
 import com.highfive.artary.dto.sticker.StickerResponseDto;
+import com.highfive.artary.dto.textGeneration.FirstSentenceRequestDto;
 import com.highfive.artary.service.*;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("diary")
@@ -43,6 +42,8 @@ public class DiaryController {
     private final ClovaSummaryService clovaSummaryService;
     @Autowired
     private final PapagoTranslationService papagoTranslationService;
+    @Autowired
+    private final FirstSentenceService firstSentenceService;
 
     @PostMapping("/write")
     public String saveDiary(@Validated @RequestBody DiaryRequestDto diaryDto, @AuthenticationPrincipal String email) {
@@ -134,4 +135,19 @@ public class DiaryController {
         // 최대 재시도 횟수를 초과한 경우
         return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @PostMapping("/firstSentence")
+    public ResponseEntity<?> createFirstSentence(@RequestBody FirstSentenceRequestDto requestDto) {
+        log.info("Input Words: {}", requestDto.getInputWords());
+
+        try {
+            FirstSentence savedSentence = firstSentenceService.save(requestDto);
+            firstSentenceService.generateText(savedSentence.getId());
+            return ResponseEntity.ok(savedSentence);
+        } catch (Exception e) {
+            log.error("Error occurred while creating the first sentence", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }
