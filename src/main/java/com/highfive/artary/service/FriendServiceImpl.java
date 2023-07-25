@@ -92,7 +92,7 @@ public class FriendServiceImpl implements FriendService {
         String content = fromUser.getNickname() + "님이 친구 신청을 했습니다.";
         String url = "http://localhost:3000/alarm";
 
-        notificationService.send(fromUser, NotificationType.FRIEND, content, url);
+        notificationService.send(toUser, NotificationType.FRIEND, content, url);
 
         userRepository.save(fromUser);
     }
@@ -107,7 +107,13 @@ public class FriendServiceImpl implements FriendService {
         friendRepository.save(friend);
 
         // 알림 생성
+        User fromUser = findUserById(fromUserId);
+        User toUser = findUserById(toUserId);
+        String reply = areWeFriend ? "수락" : "거절";
+        String content = fromUser.getNickname() + "님이 친구 신청을 " + reply + "했습니다.";
+        String url = "http://localhost:3000/alarm";
 
+        notificationService.send(toUser, NotificationType.FRIEND, content, url);
     }
 
     @Override
@@ -124,6 +130,15 @@ public class FriendServiceImpl implements FriendService {
                 new IllegalArgumentException("해당 친구가 존재하지 않습니다."));
 
         friendRepository.delete(friend);
+
+        // 알림 생성
+        User fromUser = findUserById(fromUserId);
+        User toUser = findUserById(toUserId);
+
+        String content = fromUser.getNickname() + "님이 친구를 삭제했습니다.";
+        String url = "";
+
+        notificationService.send(toUser, NotificationType.FRIEND, content, url);
     }
 
     private User findUserById(Long user_id) {
