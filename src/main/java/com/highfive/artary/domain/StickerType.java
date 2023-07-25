@@ -1,10 +1,10 @@
 package com.highfive.artary.domain;
 
 public enum StickerType {
-    HAPPY("https://cdn-icons-png.flaticon.com/512/4746/4746825.png"),
-    SAD("https://cdn-icons-png.flaticon.com/512/4746/4746825.png"),
-    LOVE("https://cdn-icons-png.flaticon.com/512/4746/4746825.png"),
-    ANGRY("https://cdn-icons-png.flaticon.com/512/4746/4746825.png");
+    goodJob("https://i.ibb.co/LYfYjXd/IMG-0308.png"),
+    cheerUp("https://i.ibb.co/jMgLXkg/cheerUp.png"),
+    goodLuck("https://i.ibb.co/kMFyCnT/goodLuck.png"),
+    perfect("https://i.ibb.co/k0FPwg6/perfect.png");
 
     private final String url;
 

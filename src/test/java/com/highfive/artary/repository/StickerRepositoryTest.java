@@ -46,7 +46,7 @@ class StickerRepositoryTest {
     @Test
     @DisplayName("스티커 생성")
     void createStickerTest() {
-        sticker = createSticker(userB, diary, StickerType.LOVE);
+        sticker = createSticker(userB, diary, StickerType.goodJob);
 
         stickerRepository.save(sticker);
 
@@ -59,7 +59,7 @@ class StickerRepositoryTest {
     @DisplayName("스티커로 다이어리 찾기")
     void stickerDiaryTest() {
         // given
-        sticker = createSticker(userB, diary, StickerType.LOVE);
+        sticker = createSticker(userB, diary, StickerType.goodJob);
         diaryRepository.save(diary);
 
         // when
@@ -91,25 +91,25 @@ class StickerRepositoryTest {
     @Test
     @DisplayName("스티커 수정")
     void modifyStickerTest() {
-        sticker = createSticker(userB, diary, StickerType.LOVE);
+        sticker = createSticker(userB, diary, StickerType.goodJob);
 
         stickerRepository.save(sticker);
 
-        sticker.setType(StickerType.HAPPY);
+        sticker.setType(StickerType.goodJob);
 
         stickerRepository.save(sticker);
 
         // then
         Optional<Sticker> result = stickerRepository.findById(sticker.getId());
         assertThat(result.isPresent()).isTrue();
-        assertThat(result.get().getType()).isEqualTo(StickerType.HAPPY);
+        assertThat(result.get().getType()).isEqualTo(StickerType.goodJob);
     }
 
     @Test
     @DisplayName("스티커 삭제")
     void deleteDiaryTest() {
         // given
-        sticker = createSticker(userB, diary, StickerType.LOVE);
+        sticker = createSticker(userB, diary, StickerType.goodJob);
 
         stickerRepository.save(sticker);
 

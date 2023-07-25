@@ -36,7 +36,7 @@ class AlarmRepositoryTest {
         userB = createUser("userB", "B", "1234", "userB@artary.com");
         friend = createFriend(userA, userB, true);
         diary = createDiary(userA, "오늘의 일기","오늘은 무언가를 배웠다.","https://example.com/image.jpg", Emotion.HAPPY);
-        sticker = createSticker(userB, diary, StickerType.LOVE);
+        sticker = createSticker(userB, diary, StickerType.goodJob);
     }
 
     @Test
