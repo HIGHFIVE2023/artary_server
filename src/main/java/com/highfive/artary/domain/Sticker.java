@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Data
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = "diary")
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "sticker")
 public class Sticker extends BaseEntity{

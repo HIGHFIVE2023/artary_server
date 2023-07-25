@@ -1,7 +1,5 @@
 package com.highfive.artary.config;
 
-import com.highfive.artary.config.auth.CustomOAuth2UserService;
-import com.highfive.artary.config.auth.OAuthSuccessHandler;
 import com.highfive.artary.security.Custom403Handler;
 import com.highfive.artary.security.JwtAuthenticationFilter;
 import com.highfive.artary.security.TokenProvider;
@@ -20,6 +18,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -41,14 +40,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private TokenProvider tokenProvider;
 
-    @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
-
-    @Autowired
-    private OAuthSuccessHandler oAuthSuccessHandler;
-
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.headers().frameOptions().sameOrigin();
@@ -62,14 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         request.antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
                                 .antMatchers("/auth/**").permitAll()
                                 .antMatchers("/", "/users/signup/**",
-                                        "/users/login/**", "/users/email", "/users/password", "/oauth2/**").permitAll()
+                                        "/users/login/**", "/users/email", "/users/password/**").permitAll()
                                 .anyRequest().authenticated()
-                )
-                .oauth2Login(login ->
-                        login.userInfoEndpoint()
-                                .userService(customOAuth2UserService)
-                                .and()
-                                .successHandler(oAuthSuccessHandler)
                 )
                 .exceptionHandling()
                     .authenticationEntryPoint(new Http403ForbiddenEntryPoint())
@@ -80,15 +65,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService)
-                .passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userService);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
     public AccessDeniedHandler accessDeniedHandler(){
         return new Custom403Handler();
     }
-
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -99,11 +87,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         ;
     }
 
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {

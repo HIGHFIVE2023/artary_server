@@ -29,6 +29,7 @@ public class User extends BaseEntity implements UserDetails{
     private String name;
 
     @NonNull
+    @Column(unique = true)
     private String nickname;
 
     @NonNull
@@ -52,6 +53,7 @@ public class User extends BaseEntity implements UserDetails{
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Setting setting;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "fromUserId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friend> friends = new ArrayList<>();
 

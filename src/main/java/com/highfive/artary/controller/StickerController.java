@@ -2,6 +2,7 @@ package com.highfive.artary.controller;
 
 import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.sticker.StickerRequestDto;
+import com.highfive.artary.repository.UserRepository;
 import com.highfive.artary.service.StickerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,10 +19,11 @@ import java.util.List;
 public class StickerController {
 
     private final StickerService stickerService;
+    private final UserRepository userRepository;
 
     @PostMapping("/{diary_id}/sticker")
-    public ResponseEntity save(@PathVariable Long diary_id, @RequestBody StickerRequestDto requestDto, @AuthenticationPrincipal User user) {
-        Long user_id = user.getId();
+    public ResponseEntity save(@PathVariable Long diary_id, @RequestBody StickerRequestDto requestDto, @AuthenticationPrincipal String email) {
+        Long user_id = findIdByEmail(email);
         stickerService.save(diary_id, user_id, requestDto);
 
         return new ResponseEntity(HttpStatus.OK);
@@ -39,5 +41,12 @@ public class StickerController {
         stickerService.delete(sticker_id);
 
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    private Long findIdByEmail(String email) {
+        Long userId = userRepository.findByEmail(email).orElseThrow(() ->
+                new IllegalArgumentException("해당 사용자가 존재하지 않습니다.")).getId();
+
+        return userId;
     }
 }
