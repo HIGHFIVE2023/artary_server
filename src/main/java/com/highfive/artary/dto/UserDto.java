@@ -12,6 +12,8 @@ public class UserDto {
 
     private String token;
 
+    private Long userId;
+
     @NotNull(message="이름을 입력해주세요")
     private String name;
 

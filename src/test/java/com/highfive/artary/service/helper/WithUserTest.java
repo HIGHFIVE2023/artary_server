@@ -22,7 +22,7 @@ public class WithUserTest {
         prepared = true;
 
         this.userRepository.deleteAll();
-//       this.userService = new UserService(userRepository);
+        this.userService = new UserService(userRepository);
         this.userTestHelper = new UserTestHelper(userService, NoOpPasswordEncoder.getInstance());
 
     }

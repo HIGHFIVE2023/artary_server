@@ -3,8 +3,6 @@ package com.highfive.artary.service;
 import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.UserDto;
 import com.highfive.artary.repository.UserRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.bcel.BcelAnnotation;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-@Slf4j
+
 @Service
 @Transactional
 public class UserService implements UserDetailsService {
@@ -92,6 +90,16 @@ public class UserService implements UserDetailsService {
 
     public void deleteById(Long userId){
         userRepository.deleteById(userId);
+    }
+
+    public boolean checkPassword(Long userId, String password){
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            PasswordEncoder encoder = new BCryptPasswordEncoder();
+            return encoder.matches(password, user.getPassword());
+        }
+        return false;
     }
 
 }

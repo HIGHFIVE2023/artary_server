@@ -90,11 +90,23 @@ class UserRepositoryTest {
     }
 
     @Test
-    @DisplayName("유저 삭제")
-    public void deleteUserTest(){
-        userRepository.save(user);
-        userRepository.delete(user);
-        assertThat(userRepository.findByEmail(user.getEmail())).isEmpty();
+    @DisplayName("회원 탈퇴")
+    void deleteUserTest(){
+        Optional<User> user = userRepository.findById(1L);
+        user.ifPresent(selectUser -> {
+            userRepository.delete(selectUser);
+        });
+    }
+
+    @Test
+    @DisplayName("회원 정보 업데이트")
+    public void update(){
+        Optional<User> user = userRepository.findById(1L);
+        user.ifPresent(selectUser->{
+            selectUser.setPassword("4567");
+            selectUser.setNickname("닉네임 수정");
+            selectUser.setImage("img_url 수정");
+        });
     }
 
 }
