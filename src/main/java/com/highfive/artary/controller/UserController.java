@@ -91,9 +91,9 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("비밀번호가 일치하지 않습니다.");
             }
             userService.deleteById(userId);
-            return ResponseEntity.ok( "회원 탈퇴 성공");
+            return ResponseEntity.ok().body("{\"message\": \"회원 탈퇴 성공\"}");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("회원 탈퇴 실패");
+            return ResponseEntity.ok().body("{\"message\": \"회원 탈퇴 실패\"}");
         }
     }
 
