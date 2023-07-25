@@ -1,10 +1,12 @@
 package com.highfive.artary.dto.textGeneration;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
+@NoArgsConstructor
 public class TextGenerationRequestDto {
     private int topK;
     private boolean includeProbs;
