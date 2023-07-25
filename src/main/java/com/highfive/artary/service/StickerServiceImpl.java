@@ -1,13 +1,12 @@
 package com.highfive.artary.service;
 
 import com.highfive.artary.domain.Diary;
+import com.highfive.artary.domain.NotificationType;
 import com.highfive.artary.domain.Sticker;
 import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.sticker.StickerRequestDto;
 import com.highfive.artary.dto.sticker.StickerResponseDto;
-import com.highfive.artary.repository.DiaryRepository;
-import com.highfive.artary.repository.StickerRepository;
-import com.highfive.artary.repository.UserRepository;
+import com.highfive.artary.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +22,8 @@ public class StickerServiceImpl implements StickerService {
     private final UserRepository userRepository;
     private final DiaryRepository diaryRepository;
     private final StickerRepository stickerRepository;
+
+    private final NotificationService notificationService;
 
     @Override
     public List<StickerResponseDto> findAllByDiary(Long diary_id) {
@@ -41,8 +42,15 @@ public class StickerServiceImpl implements StickerService {
         Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
 
+        User receiver = diary.getUser();
         Sticker sticker = requestDto.toEntity(user, diary);
         stickerRepository.save(sticker);
+
+        // 알림 생성
+        String content = user.getNickname() + "님이 '" + diary.getTitle() + "' 게시물에 스티커를 남겼습니다.";
+        String url = "http://localhost:3000/diary/" + diary.getId();
+
+        notificationService.send(receiver, NotificationType.DIARY, content, url);
 
         return sticker.getId();
     }

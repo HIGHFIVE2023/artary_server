@@ -2,6 +2,7 @@ package com.highfive.artary.service;
 
 import com.highfive.artary.domain.Friend;
 import com.highfive.artary.domain.FriendId;
+import com.highfive.artary.domain.NotificationType;
 import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.FriendDto;
 import com.highfive.artary.repository.FriendRepository;
@@ -22,6 +23,9 @@ public class FriendServiceImpl implements FriendService {
     private final UserRepository userRepository;
     @Autowired
     private final FriendRepository friendRepository;
+
+    @Autowired
+    private final NotificationService notificationService;
 
     @Override
     public User searchFriend(String email) {
@@ -84,6 +88,12 @@ public class FriendServiceImpl implements FriendService {
 
         fromUser.addFriend(friendRequest);
 
+        // 알림 생성
+        String content = fromUser.getNickname() + "님이 친구 신청을 했습니다.";
+        String url = "http://localhost:3000/alarm";
+
+        notificationService.send(fromUser, NotificationType.FRIEND, content, url);
+
         userRepository.save(fromUser);
     }
 
@@ -95,6 +105,9 @@ public class FriendServiceImpl implements FriendService {
 
         friend.setAreWeFriend(areWeFriend);
         friendRepository.save(friend);
+
+        // 알림 생성
+
     }
 
     @Override

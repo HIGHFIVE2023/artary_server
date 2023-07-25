@@ -1,5 +1,5 @@
 package com.highfive.artary.domain;
 
-public enum AlarmType {
+public enum NotificationType {
     DIARY, FRIEND
 }

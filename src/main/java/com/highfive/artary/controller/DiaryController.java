@@ -86,7 +86,7 @@ public class DiaryController {
 
     @GetMapping("/{diary_id}/picture")
     public ResponseEntity<?> getPicture(@PathVariable Long diary_id) {
-        int maxAttempts = 3; // 최대 재시도 횟수
+        int maxAttempts = 10; // 최대 재시도 횟수
         int attempts = 0;
 
         while (attempts < maxAttempts) {

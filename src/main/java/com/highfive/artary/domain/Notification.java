@@ -1,11 +1,10 @@
 package com.highfive.artary.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.hibernate.annotations.Check;
-import org.hibernate.annotations.ColumnDefault;
 
 
 import javax.persistence.*;
@@ -16,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Data
 @Table(name = "alarm")
-public class Alarm {
+public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,23 +23,16 @@ public class Alarm {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     @NonNull
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "from_user")
-    @NonNull
-    private User fromUser;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "diary_id")
-    @NonNull
-    private Diary diary;
-
     @NonNull
     @Column(name = "alarm_type")
-    private AlarmType type;
+    private NotificationType type;
+
+    private String url;
 
     @NonNull
     @Column(name = "alarm_content")
@@ -53,11 +45,12 @@ public class Alarm {
     private Boolean checked;
 
     @Builder
-    public Alarm(User user, User fromUser, AlarmType type, String content, Boolean checked) {
+    public Notification(User user, NotificationType type, String content, String url, Boolean checked) {
         this.user = user;
-        this.fromUser = fromUser;
         this.type = type;
         this.content = content;
+        this.url = url;
+        this.createdAt = LocalDateTime.now();
         this.checked = checked;
     }
 }
