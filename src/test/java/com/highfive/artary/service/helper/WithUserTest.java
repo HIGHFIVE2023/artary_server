@@ -1,6 +1,7 @@
 package com.highfive.artary.service.helper;
 
 import com.highfive.artary.repository.UserRepository;
+import com.highfive.artary.service.FriendService;
 import com.highfive.artary.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;

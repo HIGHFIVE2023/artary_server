@@ -51,5 +51,6 @@ public class Friend {
         this.toUserId = toUserId;
         this.fromUserId = fromUserId;
         this.areWeFriend = areWeFriend;
+        this.createdAt = LocalDateTime.now();
     }
 }

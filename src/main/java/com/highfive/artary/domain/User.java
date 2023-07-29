@@ -57,9 +57,9 @@ public class User extends BaseEntity implements UserDetails{
     @OneToMany(mappedBy = "fromUserId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Friend> friends = new ArrayList<>();
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Notification> notifications = new ArrayList<>();
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Notification> notifications = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

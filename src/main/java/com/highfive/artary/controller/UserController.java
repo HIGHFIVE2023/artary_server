@@ -4,6 +4,7 @@ import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.UserDto;
 import com.highfive.artary.repository.UserRepository;
 import com.highfive.artary.security.TokenProvider;
+import com.highfive.artary.service.FriendService;
 import com.highfive.artary.service.MailService;
 import com.highfive.artary.service.UserService;
 
@@ -45,6 +46,7 @@ public class UserController {
     private final TokenProvider tokenProvider;
     private final MailService mailService;
     private final PasswordEncoder passwordEncoder;
+    private final FriendService friendService;
 
 
     @PostMapping("/signup")
@@ -90,6 +92,7 @@ public class UserController {
             if(!passwordMatches){
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("{\"message\": \"비밀번호가 일치하지 않습니다.\"}");
             }
+            friendService.withdrawalFriend(userId);
             userService.deleteById(userId);
             return ResponseEntity.ok().body("{\"message\": \"회원 탈퇴 성공\"}");
         } catch (Exception e) {

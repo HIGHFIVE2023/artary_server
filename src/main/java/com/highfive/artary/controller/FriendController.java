@@ -29,9 +29,9 @@ public class FriendController {
     public ResponseEntity<?> getFriendsList(@AuthenticationPrincipal String email) {
         Long userId = findIdByEmail(email);
 
-        List<FriendDto> friendDtoList = friendService.findAll(userId);
+        List<User> friendList = friendService.findAll(userId);
 
-        return new ResponseEntity<>(friendDtoList, HttpStatus.OK);
+        return new ResponseEntity<>(friendList, HttpStatus.OK);
     }
 
     // 친구 요청 목록
@@ -60,7 +60,7 @@ public class FriendController {
 
         friendService.addFriend(fromUserId, toUserId);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body("{\"message\": \"친구 요청 성공\"}");
     }
 
     // 친구 요청 응답 (수락 or 거절)
@@ -71,7 +71,7 @@ public class FriendController {
 
         friendService.replyFriendRequest(fromUserId, toUserId, are_we_friend);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body("{\"message\": \"친구 요청 응답 성공\"}");
     }
 
     // 친구 삭제
@@ -82,7 +82,28 @@ public class FriendController {
 
         friendService.deleteFriend(fromUserId, toUserId);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body("{\"message\": \"친구 삭제 성공\"}");
+    }
+
+    // 친구인지 확인
+    @GetMapping("/checkFriend/{friend_email}")
+    @ResponseBody
+    public Boolean checkFriend(@PathVariable String friend_email, @AuthenticationPrincipal String email) {
+        Long userId = findIdByEmail(email);
+        Long friendId = findIdByEmail(friend_email);
+
+        return friendService.checkFriend(userId, friendId);
+    }
+
+    // 요청 확인
+    @GetMapping("/checkRequest/{friend_email}")
+    public ResponseEntity<?> checkRequest(@PathVariable String friend_email, @AuthenticationPrincipal String email) {
+        Long userId = findIdByEmail(email);
+        Long friendId = findIdByEmail(friend_email);
+
+        List<FriendDto> friendDtoList = friendService.checkRequest(userId, friendId);
+
+        return new ResponseEntity<>(friendDtoList, HttpStatus.OK);
     }
 
     private Long findIdByEmail(String email) {

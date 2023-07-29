@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -36,17 +37,24 @@ public class FriendServiceImpl implements FriendService {
     }
 
     @Override
-    public List<FriendDto> findAll(Long user_id) {
-        List<FriendDto> friendDtos = new ArrayList<>();
+    public List<User> findAll(Long user_id) {
+//        List<FriendDto> friendDtos = new ArrayList<>();
         User user = findUserById(user_id);
         List<Friend> friends = friendRepository.findAllByFromUserIdAndAreWeFriendOrToUserIdAndAreWeFriend(user, true, user, true);
 
+        List<User> friendsInfos = new ArrayList<>();
+
         for (Friend friend : friends) {
-            FriendDto friendDto = new FriendDto(friend);
-            friendDtos.add(friendDto);
+            User friendInfo = friend.getToUserId() == user ? friend.getFromUserId() : friend.getToUserId();
+            friendsInfos.add(friendInfo);
         }
 
-        return friendDtos;
+//        for (Friend friend : friends) {
+//            FriendDto friendDto = new FriendDto(friend);
+//            friendDtos.add(friendDto);
+//        }
+
+        return friendsInfos;
     }
 
     @Override
@@ -73,8 +81,7 @@ public class FriendServiceImpl implements FriendService {
         User fromUser = findUserById(fromUserId);
         User toUser = findUserById(toUserId);
 
-        List<Friend> friends = friendRepository.findAllByFromUserIdAndToUserIdAndAreWeFriend(fromUser, toUser, true);
-        if (!friends.isEmpty()) {
+        if (checkFriend(fromUserId, toUserId)) {
             throw new IllegalArgumentException("이미 친구입니다.");
         }
 
@@ -103,8 +110,12 @@ public class FriendServiceImpl implements FriendService {
         Friend friend = friendRepository.findById(friendId).orElseThrow(() ->
                 new IllegalArgumentException("해당 친구 신청이 존재하지 않습니다."));
 
-        friend.setAreWeFriend(areWeFriend);
-        friendRepository.save(friend);
+        if (areWeFriend == true) {
+            friend.setAreWeFriend(true);
+            friendRepository.save(friend);
+        } else {
+            friendRepository.delete(friend);
+        }
 
         // 알림 생성
         User fromUser = findUserById(fromUserId);
@@ -141,10 +152,58 @@ public class FriendServiceImpl implements FriendService {
         notificationService.send(toUser, NotificationType.FRIEND, content, url);
     }
 
+    // 회원 탈퇴한 사용자의 친구 삭제
+    @Override
+    public void withdrawalFriend(Long userId) {
+        User user = findUserById(userId);
+
+        List<Friend> friendList = friendRepository.findAllByFromUserIdOrToUserId(user, user);
+        List<FriendId> friendIds = friendList.stream().map(Friend::getId).collect(Collectors.toList());
+
+        for (FriendId friendId : friendIds) {
+            friendRepository.deleteById(friendId);
+        }
+    }
+
+    @Override
+    public Boolean checkFriend(Long userId, Long friendId) {
+        List<Friend> friends = findFriendsList(userId, friendId, true);
+
+        if (!friends.isEmpty()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public List<FriendDto> checkRequest(Long userId, Long friendId) {
+        List<Friend> friends = findFriendsList(userId, friendId, false);
+
+        List<FriendDto> friendDtos = new ArrayList<>();
+
+        for (Friend friend : friends) {
+            FriendDto friendDto = new FriendDto(friend);
+            friendDtos.add(friendDto);
+        }
+
+        return friendDtos;
+    }
+
     private User findUserById(Long user_id) {
         User user = userRepository.findById(user_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
         return user;
+    }
+
+    private List<Friend> findFriendsList(Long user1_id, Long user2_id, boolean areWeFriend) {
+        User user1 = findUserById(user1_id);
+        User user2 = findUserById(user2_id);
+
+        List<Friend> friendsList = friendRepository.findAllByFromUserIdAndToUserIdAndAreWeFriend(user1, user2, areWeFriend);
+        friendsList.addAll(friendRepository.findAllByFromUserIdAndToUserIdAndAreWeFriend(user2, user1, areWeFriend));
+
+        return friendsList;
     }
 }

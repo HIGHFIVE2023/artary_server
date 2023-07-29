@@ -12,7 +12,7 @@ public interface FriendService {
     User searchFriend(String email);
 
     // 친구 목록 조회
-    List<FriendDto> findAll(Long user_id);
+    List<User> findAll(Long user_id);
 
     // 친구 요청 조회
     List<FriendDto> getRequests(Long user_id);
@@ -25,4 +25,13 @@ public interface FriendService {
 
     // 친구 삭제
     void deleteFriend(Long fromUserId, Long toUserId);
+
+    // 회원 탈퇴한 친구 삭제
+    void withdrawalFriend(Long userId);
+
+    // 친구인지 확인
+    Boolean checkFriend(Long userId, Long friendId);
+
+    // 친구 요청 확인
+    List<FriendDto> checkRequest(Long userId, Long friendId);
 }
