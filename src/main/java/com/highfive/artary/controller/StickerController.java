@@ -26,21 +26,21 @@ public class StickerController {
         Long user_id = findIdByEmail(email);
         stickerService.save(diary_id, user_id, requestDto);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body("{\"message\": \"스티커 등록 성공\"}");
     }
 
     @PutMapping("/{diary_id}/sticker/{sticker_id}")
     public ResponseEntity update(@PathVariable("sticker_id") Long sticker_id, @RequestBody StickerRequestDto requestDto) {
         stickerService.update(sticker_id, requestDto);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body("{\"message\": \"스티커 수정 성공\"}");
     }
 
     @DeleteMapping("/{diary_id}/sticker/{sticker_id}")
     public ResponseEntity delete(@PathVariable("sticker_id") Long sticker_id) {
         stickerService.delete(sticker_id);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body("{\"message\": \"삭제 성공\"}");
     }
 
     private Long findIdByEmail(String email) {
