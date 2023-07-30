@@ -43,7 +43,7 @@ public class User extends BaseEntity implements UserDetails{
     @Column(unique = true)
     private String email;
 
-    @Column(name = "profile_img")
+    @Column(name = "profile_img", length = 65535, columnDefinition="TEXT")
     private String image;
 
     @JsonIgnore
