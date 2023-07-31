@@ -15,7 +15,7 @@ import java.util.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Data
-@ToString(callSuper = true, exclude = {"friends"})
+@ToString(callSuper = true, exclude = {"friends", "notifications"})
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "user")
 public class User extends BaseEntity implements UserDetails{
@@ -49,6 +49,10 @@ public class User extends BaseEntity implements UserDetails{
     @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Diary> diaries = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TemporaryDiary> temporarydiaries = new ArrayList<>();
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Setting setting;

@@ -18,7 +18,7 @@ public class Summary extends BaseEntity{
     private Long id;
 
     @OneToOne(mappedBy = "summary", fetch = FetchType.LAZY)
-    private Diary diary;
+    private TemporaryDiary diary;
 
     @Column(name = "korean")
     private String koSummary;
@@ -27,7 +27,7 @@ public class Summary extends BaseEntity{
     private String engSummary;
 
     @Builder
-    public Summary(Diary diary) {
+    public Summary(TemporaryDiary diary) {
         this.diary = diary;
     }
 }

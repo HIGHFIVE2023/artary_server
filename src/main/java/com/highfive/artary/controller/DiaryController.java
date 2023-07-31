@@ -1,9 +1,12 @@
 package com.highfive.artary.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.highfive.artary.domain.FirstSentence;
 import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.diary.DiaryRequestDto;
 import com.highfive.artary.dto.diary.DiaryResponseDto;
+import com.highfive.artary.dto.diary.TemporaryDiaryRequestDto;
+import com.highfive.artary.dto.diary.TemporaryDiaryResponseDto;
 import com.highfive.artary.dto.sticker.StickerResponseDto;
 import com.highfive.artary.dto.textGeneration.FirstSentenceRequestDto;
 import com.highfive.artary.service.*;
@@ -31,9 +34,9 @@ import java.util.Map;
 public class DiaryController {
 
     @Autowired
-    private final UserService userService;
-    @Autowired
     private final DiaryService diaryService;
+    @Autowired
+    private final TemporaryDiaryService temporaryDiaryService;
     @Autowired
     private final StickerService stickerService;
     @Autowired
@@ -45,9 +48,18 @@ public class DiaryController {
     @Autowired
     private final FirstSentenceService firstSentenceService;
 
+    // 임시 저장
     @PostMapping("/write")
-    public String saveDiary(@Validated @RequestBody DiaryRequestDto diaryDto, @AuthenticationPrincipal String email) {
-        Long savedId = diaryService.save(diaryDto, email);
+    public ResponseEntity<Long> saveTemporaryDiary(@Validated @RequestBody TemporaryDiaryRequestDto diaryDto, @AuthenticationPrincipal String email) {
+        Long savedId = temporaryDiaryService.save(diaryDto, email);
+
+        return ResponseEntity.ok(savedId);
+    }
+
+    // Diary 저장
+    @PostMapping("/{diary_id}/save")
+    public String saveDiary(@PathVariable Long diary_id, @AuthenticationPrincipal String email) {
+        Long savedId = diaryService.save(diary_id, email);
 
         return "redirect:/diary/" + savedId;
     }
@@ -61,6 +73,14 @@ public class DiaryController {
         model.addAttribute("stickerList", stickerListDto);
 
         return new ResponseEntity<>(diaryService.getById(diary_id), HttpStatus.OK);
+    }
+
+    @GetMapping("/temporary/{diary_id}")
+    public ResponseEntity<?> getTemporaryDiary(@PathVariable Long diary_id, Model model) {
+        TemporaryDiaryResponseDto temporaryDiaryResponseDto = temporaryDiaryService.getById(diary_id);
+        model.addAttribute("diary", temporaryDiaryResponseDto);
+
+        return new ResponseEntity<>(temporaryDiaryService.getById(diary_id), HttpStatus.OK);
     }
 
     @GetMapping("/diaries")
@@ -88,6 +108,7 @@ public class DiaryController {
     @DeleteMapping("/{diary_id}")
     public ResponseEntity deleteDiary(@PathVariable Long diary_id) {
         diaryService.delete(diary_id);
+        temporaryDiaryService.delete(diary_id);
 
         return ResponseEntity.ok().body("{\"message\": \"삭제 성공\"}");
     }
@@ -103,7 +124,7 @@ public class DiaryController {
                 String summary = clovaSummaryService.summarizeDiary(diary_id);
                 String engSummary = papagoTranslationService.translateSummary(diary_id);
 
-                diaryService.setSummary(diary_id, summary, engSummary);
+                temporaryDiaryService.setSummary(diary_id, summary, engSummary);
 
                 String imageUrl = stablediffusionService.getTextToImage(diary_id);
 

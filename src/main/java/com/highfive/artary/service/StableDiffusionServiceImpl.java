@@ -1,9 +1,11 @@
 package com.highfive.artary.service;
 
 import com.highfive.artary.domain.Diary;
+import com.highfive.artary.domain.TemporaryDiary;
 import com.highfive.artary.dto.stablediffusion.StableDiffusionRequestDto;
 import com.highfive.artary.dto.stablediffusion.StableDiffusionResponseDto;
 import com.highfive.artary.repository.DiaryRepository;
+import com.highfive.artary.repository.TemporaryDiaryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class StableDiffusionServiceImpl implements StableDiffusionService {
 
-    private final DiaryRepository diaryRepository;
+    private final TemporaryDiaryRepository diaryRepository;
 
     private static final String API_URL = "https://stablediffusionapi.com/api/v3/text2img";
     @Value("${STABLE-DIFFUSION-KEY}")
@@ -33,7 +35,7 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
 
     @Override
     public String getTextToImage(Long diary_id) {
-        Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
+        TemporaryDiary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
 
         String prompt = "water color painting of '";

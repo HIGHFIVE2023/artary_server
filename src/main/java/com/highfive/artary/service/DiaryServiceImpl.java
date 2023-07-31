@@ -1,13 +1,11 @@
 package com.highfive.artary.service;
 
-import com.highfive.artary.domain.Diary;
-import com.highfive.artary.domain.Sticker;
-import com.highfive.artary.domain.Summary;
-import com.highfive.artary.domain.User;
+import com.highfive.artary.domain.*;
 import com.highfive.artary.dto.diary.DiaryRequestDto;
 import com.highfive.artary.dto.diary.DiaryResponseDto;
 import com.highfive.artary.dto.sticker.StickerResponseDto;
 import com.highfive.artary.repository.DiaryRepository;
+import com.highfive.artary.repository.TemporaryDiaryRepository;
 import com.highfive.artary.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +19,7 @@ import java.util.List;
 @Transactional
 public class DiaryServiceImpl implements DiaryService {
     private final DiaryRepository diaryRepository;
+    private final TemporaryDiaryRepository temporaryDiaryRepository;
     private final UserRepository userRepository;
 
     @Override
@@ -64,29 +63,23 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public Long save(DiaryRequestDto requestDto, String email) {
+    public Long save(Long diary_id, String email) {
         User user = userRepository.findByEmail(email).orElseThrow(() ->
                 new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
-        return diaryRepository.save(requestDto.toEntity(user)).getId();
-    }
+        TemporaryDiary temporaryDiary = temporaryDiaryRepository.findById(diary_id).orElseThrow(() ->
+                new IllegalArgumentException("해당 데이터가 존재하지 않습니다."));
 
-    @Override
-    public void setSummary(Long diary_id, String koSummary, String engSummary) {
-        Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+        Diary diary = Diary.builder()
+                .id(diary_id)
+                .user(user)
+                .title(temporaryDiary.getTitle())
+                .content(temporaryDiary.getContent())
+                .image(temporaryDiary.getImage())
+                .emotion(temporaryDiary.getEmotion())
+                .build();
 
-        Summary summary = diary.getSummary();
-        if (summary == null) {
-            summary = new Summary();
-            summary.setDiary(diary);
-        }
-
-        summary.setKoSummary(koSummary);
-        summary.setEngSummary(engSummary);
-
-        diary.setSummary(summary);
-        diaryRepository.save(diary);
+        return diaryRepository.save(diary).getId();
     }
 
     @Override

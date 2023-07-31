@@ -2,12 +2,14 @@ package com.highfive.artary.service;
 
 import com.highfive.artary.domain.Diary;
 import com.highfive.artary.domain.Summary;
+import com.highfive.artary.domain.TemporaryDiary;
 import com.highfive.artary.dto.ClovaSummary.ClovaSummaryRequestDto;
 import com.highfive.artary.dto.ClovaSummary.ClovaSummaryResponseDto;
 import com.highfive.artary.dto.ClovaSummary.DocumentObject;
 import com.highfive.artary.dto.ClovaSummary.OptionObject;
 import com.highfive.artary.repository.DiaryRepository;
 import com.highfive.artary.repository.SummaryRepository;
+import com.highfive.artary.repository.TemporaryDiaryRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +22,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @RequiredArgsConstructor
 public class ClovaSummaryServiceImpl implements ClovaSummaryService{
 
-    private final DiaryRepository diaryRepository;
+    private final TemporaryDiaryRepository diaryRepository;
     private final SummaryRepository summaryRepository;
 
     private static final String API_URL = "https://naveropenapi.apigw.ntruss.com/text-summary/v1/summarize";
@@ -35,7 +37,7 @@ public class ClovaSummaryServiceImpl implements ClovaSummaryService{
 
     @Override
     public String summarizeDiary(Long diary_id) {
-        Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
+        TemporaryDiary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
 
         Summary summary = Summary.builder()
