@@ -22,11 +22,11 @@ public class StickerController {
     private final UserRepository userRepository;
 
     @PostMapping("/{diary_id}/sticker")
-    public ResponseEntity save(@PathVariable Long diary_id, @RequestBody StickerRequestDto requestDto, @AuthenticationPrincipal String email) {
+    public ResponseEntity<Long> save(@PathVariable Long diary_id, @RequestBody StickerRequestDto requestDto, @AuthenticationPrincipal String email) {
         Long user_id = findIdByEmail(email);
-        stickerService.save(diary_id, user_id, requestDto);
+        Long sticer_id = stickerService.save(diary_id, user_id, requestDto);
 
-        return ResponseEntity.ok().body("{\"message\": \"스티커 등록 성공\"}");
+        return ResponseEntity.ok(sticer_id);
     }
 
     @PutMapping("/{diary_id}/sticker/{sticker_id}")
