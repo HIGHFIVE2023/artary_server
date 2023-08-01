@@ -8,8 +8,9 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@Data
-@EqualsAndHashCode(callSuper = true, exclude = "user")
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = true, exclude = {"user", "stickers"})
 @Table(name = "diary")
 public class Diary extends BaseDiary{
 

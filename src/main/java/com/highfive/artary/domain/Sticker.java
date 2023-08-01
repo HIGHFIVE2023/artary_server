@@ -9,9 +9,9 @@ import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
-@Data
-@ToString(callSuper = true, exclude = "diary")
-@EqualsAndHashCode(callSuper = true)
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = true, exclude = {"diary", "user"})
 @Table(name = "sticker")
 public class Sticker extends BaseEntity{
     @Id

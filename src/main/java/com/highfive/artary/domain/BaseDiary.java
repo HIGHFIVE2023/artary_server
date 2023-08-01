@@ -6,7 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 
-@Data
+@Getter @Setter
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true, exclude = "user")
 @MappedSuperclass
