@@ -11,6 +11,7 @@ import javax.validation.constraints.NotEmpty;
 @EqualsAndHashCode(callSuper = true, exclude = "user")
 @MappedSuperclass
 public abstract class BaseDiary extends BaseEntity {
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     @JoinColumn(name = "user_id")
