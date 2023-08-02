@@ -98,11 +98,17 @@ public class DiaryController {
     }
 
     @PutMapping("/{diary_id}")
-    public ResponseEntity updateDiary(@RequestBody DiaryRequestDto diaryDto, @PathVariable Long diary_id, User user) {
-        Long userId = user.getId();
-        diaryService.update(diaryDto, userId, diary_id);
+    public ResponseEntity updateDiary(@RequestBody TemporaryDiaryRequestDto requestDto, @PathVariable Long diary_id) {
+        temporaryDiaryService.update(requestDto, diary_id);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.ok().body("{\"message\": \"수정 성공\"}");
+    }
+
+    @PutMapping("/{diary_id}/edit")
+    public ResponseEntity editDiary(@PathVariable Long diary_id) {
+        diaryService.update(diary_id);
+
+        return ResponseEntity.ok().body("{\"message\": \"수정 성공\"}");
     }
 
     @DeleteMapping("/{diary_id}")

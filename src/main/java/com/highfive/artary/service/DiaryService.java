@@ -18,7 +18,7 @@ public interface DiaryService {
     Long save(Long diary_id, String email);
 
     // 일기 수정
-    void update(DiaryRequestDto requestDto, Long user_id, Long diary_id);
+    void update(Long diary_id);
 
     // 일기 삭제
     void delete(Long diary_id);

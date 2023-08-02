@@ -9,4 +9,5 @@ public interface TemporaryDiaryService {
     Long save(TemporaryDiaryRequestDto requestDto, String email);
     void setSummary(Long diary_id, String koSummary, String engSummary);
     void delete(Long diary_id);
+    void update(TemporaryDiaryRequestDto requestDto, Long diary_id);
 }

@@ -83,10 +83,15 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public void update(DiaryRequestDto requestDto, Long user_id, Long diary_id) {
+    public void update(Long diary_id) {
         Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
-        diary.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getImage(), requestDto.getEmotion());
+
+        TemporaryDiary temporaryDiary = temporaryDiaryRepository.findById(diary_id).orElseThrow(() ->
+                new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+
+        diary.update(temporaryDiary.getTitle(), temporaryDiary.getContent(), temporaryDiary.getEmotion());
+        diary.updateImage(temporaryDiary.getImage());
     }
 
     @Override

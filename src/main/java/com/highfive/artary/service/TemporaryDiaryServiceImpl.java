@@ -4,10 +4,9 @@ import com.highfive.artary.domain.Diary;
 import com.highfive.artary.domain.Summary;
 import com.highfive.artary.domain.TemporaryDiary;
 import com.highfive.artary.domain.User;
-import com.highfive.artary.dto.diary.DiaryRequestDto;
-import com.highfive.artary.dto.diary.DiaryResponseDto;
 import com.highfive.artary.dto.diary.TemporaryDiaryRequestDto;
 import com.highfive.artary.dto.diary.TemporaryDiaryResponseDto;
+import com.highfive.artary.repository.DiaryRepository;
 import com.highfive.artary.repository.TemporaryDiaryRepository;
 import com.highfive.artary.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +20,7 @@ public class TemporaryDiaryServiceImpl implements TemporaryDiaryService {
 
     private final TemporaryDiaryRepository temporaryDiaryRepository;
     private final UserRepository userRepository;
+    private final DiaryRepository diaryRepository;
 
     @Override
     public TemporaryDiaryResponseDto getById(Long diary_id) {
@@ -61,5 +61,13 @@ public class TemporaryDiaryServiceImpl implements TemporaryDiaryService {
         TemporaryDiary diary = temporaryDiaryRepository.findById(diary_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
         temporaryDiaryRepository.delete(diary);
+    }
+
+    @Override
+    public void update(TemporaryDiaryRequestDto requestDto, Long diary_id) {
+        TemporaryDiary diary = temporaryDiaryRepository.findById(diary_id).orElseThrow(() ->
+                new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+
+        diary.update(requestDto.getTitle(), requestDto.getContent(), requestDto.getEmotion());
     }
 }

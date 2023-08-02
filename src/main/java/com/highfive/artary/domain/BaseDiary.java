@@ -42,10 +42,13 @@ public abstract class BaseDiary extends BaseEntity {
         this.emotion = emotion;
     }
 
-    public void update(String title, String content, String image, Emotion emotion) {
+    public void update(String title, String content, Emotion emotion) {
         this.title = title;
         this.content = content;
-        this.image = image;
         this.emotion = emotion;
+    }
+
+    public void updateImage(String image) {
+        this.image = image;
     }
 }

@@ -14,7 +14,7 @@ public class Summary extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "sticker_id")
+    @Column(name = "summary_id")
     private Long id;
 
     @OneToOne(mappedBy = "summary", fetch = FetchType.LAZY)
