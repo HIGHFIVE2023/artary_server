@@ -69,10 +69,24 @@ public class UserController {
         return ResponseEntity.ok(userService.checkNicknameDuplication(nickname));
     }
 
+    // 비밀번호를 찾기 위한 이메일 전송
     @PostMapping("/password/mailConfirm")
     @ResponseBody
-    public String mailConfirm(@RequestParam String email) throws Exception {
-        return mailService.sendSimpleMessage(email);
+    public ResponseEntity<?> mailConfirm(@RequestParam String email){
+       Optional<User> user = userRepository.findByEmail(email);
+
+        if (user.isPresent()) {
+            try {
+                String mailResponse = mailService.sendSimpleMessage(email);
+                return ResponseEntity.ok().body(mailResponse);
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body("{\"message\": \"이메일 전송 실패\"}");
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("{\"message\": \"가입되지 않은 E-MAIL 입니다.\"}");
+        }
     }
 
     // 이메일 찾기
