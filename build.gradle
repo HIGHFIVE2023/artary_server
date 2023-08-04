@@ -33,7 +33,7 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	testImplementation 'org.springframework.security:spring-security-test'
-	implementation 'org.springframework.boot:spring-boot-starter-mail:2.7.0'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'com.google.code.gson:gson:2.8.7'
 
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'

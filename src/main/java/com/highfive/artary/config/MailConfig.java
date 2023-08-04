@@ -11,6 +11,7 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:application.properties")
+@PropertySource("classpath:application-API-KEY.properties")
 public class MailConfig {
 
     @Value("${spring.mail.username}")
@@ -32,16 +33,17 @@ public class MailConfig {
         javaMailSender.setPort(port);
         javaMailSender.setJavaMailProperties(getMailProperties());
         javaMailSender.setDefaultEncoding("UTF-8");
+
         return javaMailSender;
     }
+
     private Properties getMailProperties() {
         Properties properties = new Properties();
         properties.setProperty("mail.transport.protocol", "smtp");
         properties.setProperty("mail.smtp.auth", "true");
         properties.setProperty("mail.smtp.starttls.enable", "true");
         properties.setProperty("mail.debug", "true");
-        properties.setProperty("mail.smtp.ssl.trust","smtp.mailplug.co.kr");
-        properties.setProperty("mail.smtp.ssl.enable","true");
+
         return properties;
     }
 }

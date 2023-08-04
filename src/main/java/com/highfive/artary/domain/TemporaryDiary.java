@@ -7,7 +7,6 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Data
-@ToString(callSuper = true, exclude = "user")
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "temporary_diary")
 public class TemporaryDiary extends BaseDiary {

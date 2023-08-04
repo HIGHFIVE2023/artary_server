@@ -88,6 +88,20 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public void updatePassword(Long userId, String newPassword) {
+        try {
+            PasswordEncoder encoder = new BCryptPasswordEncoder();
+
+            User existingUser = userRepository.findById(userId).orElseThrow();
+            existingUser.setPassword(encoder.encode(newPassword));
+            existingUser.setUpdatedAt(LocalDateTime.now());
+
+            userRepository.save(existingUser);
+        } catch (NoSuchElementException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다.", e);
+        }
+    }
+
     public void deleteById(Long userId){
         userRepository.deleteById(userId);
     }

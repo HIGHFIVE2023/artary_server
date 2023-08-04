@@ -85,13 +85,6 @@ public class User extends BaseEntity implements UserDetails{
         this.image = image;
     }
 
-    public User update(String nickname, String image){
-        this.nickname = nickname;
-        this.image = image;
-
-        return this;
-    }
-
     public void addFriend(Friend friend) {
         friends.add(friend);
     }
@@ -120,6 +113,5 @@ public class User extends BaseEntity implements UserDetails{
     public boolean isEnabled() {
         return true;
     }
-
 
 }
