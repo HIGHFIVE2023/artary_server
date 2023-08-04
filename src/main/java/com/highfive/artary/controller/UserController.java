@@ -48,7 +48,6 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
     private final FriendService friendService;
 
-
     @PostMapping("/signup")
     @ResponseBody
     public ResponseEntity<?> signup(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) throws Exception {
@@ -69,8 +68,8 @@ public class UserController {
         return ResponseEntity.ok(userService.checkNicknameDuplication(nickname));
     }
 
-    // 비밀번호를 찾기 위한 이메일 전송
-    @PostMapping("/password/mailConfirm")
+    // 비밀번호를 찾기
+    @PostMapping("/password")
     @ResponseBody
     public ResponseEntity<?> mailConfirm(@RequestParam String email){
        Optional<User> user = userRepository.findByEmail(email);

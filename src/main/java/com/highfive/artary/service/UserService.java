@@ -108,6 +108,7 @@ public class UserService implements UserDetailsService {
 
     public boolean checkPassword(Long userId, String password){
         Optional<User> optionalUser = userRepository.findById(userId);
+
         if(optionalUser.isPresent()){
             User user = optionalUser.get();
             PasswordEncoder encoder = new BCryptPasswordEncoder();
