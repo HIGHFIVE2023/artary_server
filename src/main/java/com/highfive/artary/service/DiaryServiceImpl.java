@@ -50,9 +50,9 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public Page<Diary> getPageDiaries(String email, int page) {
+    public Page<Diary> getPageDiaries(String nickname, int page) {
         PageRequest pageRequest = PageRequest.of(page - 1, 4);
-        User user = userRepository.findByEmail(email).orElseThrow(() ->
+        User user = userRepository.findByNickname(nickname).orElseThrow(() ->
                 new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
         return diaryRepository.findByUserOrderByIdDesc(user, pageRequest);

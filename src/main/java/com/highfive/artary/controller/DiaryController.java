@@ -93,9 +93,9 @@ public class DiaryController {
     }
 
     // 페이지네이션
-    @GetMapping("/pagination/{email}")
-    public ResponseEntity<?> getPageDiaries(@PathVariable String email, @Positive @RequestParam int page) {
-        Page<Diary> diaryPage = diaryService.getPageDiaries(email, page);
+    @GetMapping("/pagination/{nickname}")
+    public ResponseEntity<?> getPageDiaries(@PathVariable String nickname, @Positive @RequestParam int page) {
+        Page<Diary> diaryPage = diaryService.getPageDiaries(nickname, page);
         PageInfo pageInfo = new PageInfo(page, 4, (int) diaryPage.getTotalElements(), diaryPage.getTotalPages());
         List<Diary> diaries = diaryPage.getContent();
 

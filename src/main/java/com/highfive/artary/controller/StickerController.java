@@ -24,9 +24,9 @@ public class StickerController {
     @PostMapping("/{diary_id}/sticker")
     public ResponseEntity<Long> save(@PathVariable Long diary_id, @RequestBody StickerRequestDto requestDto, @AuthenticationPrincipal String email) {
         Long user_id = findIdByEmail(email);
-        Long sticer_id = stickerService.save(diary_id, user_id, requestDto);
+        Long sticker_id = stickerService.save(diary_id, user_id, requestDto);
 
-        return ResponseEntity.ok(sticer_id);
+        return ResponseEntity.ok(sticker_id);
     }
 
     @PutMapping("/{diary_id}/sticker/{sticker_id}")
