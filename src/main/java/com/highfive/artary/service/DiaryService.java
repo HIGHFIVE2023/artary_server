@@ -1,8 +1,11 @@
 package com.highfive.artary.service;
 
+import com.highfive.artary.domain.Diary;
 import com.highfive.artary.dto.diary.DiaryRequestDto;
 import com.highfive.artary.dto.diary.DiaryResponseDto;
 import com.highfive.artary.dto.sticker.StickerResponseDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,6 +14,8 @@ public interface DiaryService {
     DiaryResponseDto getById(Long diary_id);
 
     List<DiaryResponseDto> getDiaries(String email);
+
+    Page<Diary> getPageDiaries(String email, int page);
 
     List<StickerResponseDto> getStickers(Long diaryId);
 

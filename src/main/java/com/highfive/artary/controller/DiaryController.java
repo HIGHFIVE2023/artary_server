@@ -1,12 +1,10 @@
 package com.highfive.artary.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.highfive.artary.domain.Diary;
 import com.highfive.artary.domain.FirstSentence;
 import com.highfive.artary.domain.User;
-import com.highfive.artary.dto.diary.DiaryRequestDto;
-import com.highfive.artary.dto.diary.DiaryResponseDto;
-import com.highfive.artary.dto.diary.TemporaryDiaryRequestDto;
-import com.highfive.artary.dto.diary.TemporaryDiaryResponseDto;
+import com.highfive.artary.dto.diary.*;
 import com.highfive.artary.dto.sticker.StickerResponseDto;
 import com.highfive.artary.dto.textGeneration.FirstSentenceRequestDto;
 import com.highfive.artary.service.*;
@@ -14,15 +12,19 @@ import com.highfive.artary.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 
+import javax.validation.constraints.Positive;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -88,6 +90,16 @@ public class DiaryController {
         List<DiaryResponseDto> diaryResponseDtos = diaryService.getDiaries(email);
 
         return new ResponseEntity<>(diaryResponseDtos, HttpStatus.OK);
+    }
+
+    // 페이지네이션
+    @GetMapping("/pagination/{email}")
+    public ResponseEntity<?> getPageDiaries(@PathVariable String email, @Positive @RequestParam int page) {
+        Page<Diary> diaryPage = diaryService.getPageDiaries(email, page);
+        PageInfo pageInfo = new PageInfo(page, 4, (int) diaryPage.getTotalElements(), diaryPage.getTotalPages());
+        List<Diary> diaries = diaryPage.getContent();
+
+        return new ResponseEntity<>(new DiaryAllDto(diaries, pageInfo), HttpStatus.OK);
     }
 
     @GetMapping("/{diary_id}/stickers")

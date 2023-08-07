@@ -30,10 +30,6 @@ public abstract class BaseDiary extends BaseEntity {
     @NonNull
     private Emotion emotion;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "summary_id")
-    private Summary summary;
-
     public BaseDiary(User user, String title, String content, String image, Emotion emotion) {
         this.user = user;
         this.title = title;
