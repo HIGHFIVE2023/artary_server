@@ -131,8 +131,17 @@ public class DiaryController {
         return ResponseEntity.ok().body("{\"message\": \"삭제 성공\"}");
     }
 
-    @GetMapping("/{diary_id}/picture")
-    public ResponseEntity<?> getPicture(@PathVariable Long diary_id) {
+    @GetMapping("/{diary_id}/picture/paint")
+    public ResponseEntity<?> getPictureV1(@PathVariable Long diary_id) {
+        return getPictureResponse(diary_id, "V1");
+    }
+
+    @GetMapping("/{diary_id}/picture/pencil")
+    public ResponseEntity<?> getPictureV2(@PathVariable Long diary_id) {
+        return getPictureResponse(diary_id, "V2");
+    }
+
+    private ResponseEntity<?> getPictureResponse(Long diary_id, String version) {
         int maxAttempts = 10; // 최대 재시도 횟수
         int attempts = 0;
 
@@ -144,7 +153,9 @@ public class DiaryController {
 
                 temporaryDiaryService.setSummary(diary_id, summary, engSummary);
 
-                String imageUrl = stablediffusionService.getTextToImage(diary_id);
+                String imageUrl = version.equals("V1") ?
+                        stablediffusionService.getTextToImageV1(diary_id) :
+                        stablediffusionService.getTextToImageV2(diary_id);
 
                 Map<String, Object> response = new HashMap<>();
                 response.put("imageUrl", imageUrl);

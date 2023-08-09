@@ -34,19 +34,36 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
             .build();
 
     @Override
-    public String getTextToImage(Long diary_id) {
+    public String getTextToImageV1(Long diary_id) {
+        String prompt1 = "water color painting of '";
+        String prompt2 = "', minimalism, vaporwave aesthetic, Cute, Energetic, Dreamcore style, vibrant colors";
+        String imageUrl = getImageUrl(diary_id, prompt1, prompt2);
+
+        return imageUrl;
+    }
+
+    @Override
+    public String getTextToImageV2(Long diary_id) {
+        // 그림체 명령어 수정 필요
+        String prompt1 = "pencil color painting of '";
+        String prompt2 = "', minimalism, vaporwave aesthetic, Cute, Energetic, Dreamcore style, vibrant colors";
+        String imageUrl = getImageUrl(diary_id, prompt1, prompt2);
+
+        return imageUrl;
+    }
+
+    private String getImageUrl(Long diary_id, String prompt1, String prompt2) {
         TemporaryDiary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
 
-        String prompt = "water color painting of '";
         if (diary.getSummary() != null && diary.getSummary().getEngSummary() != null) {
-            prompt += diary.getSummary().getEngSummary();
+            prompt1 += diary.getSummary().getEngSummary();
         }
-        prompt += "', minimalism, vaporwave aesthetic, Cute, Energetic, Dreamcore style, vibrant colors";
+        prompt1 += prompt2;
 
         StableDiffusionRequestDto requestDto = StableDiffusionRequestDto.builder()
                 .key(key)
-                .prompt(prompt)
+                .prompt(prompt1)
                 .width(512)
                 .height(512)
                 .samples(1)
