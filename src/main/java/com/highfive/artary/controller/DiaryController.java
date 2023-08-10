@@ -90,6 +90,13 @@ public class DiaryController {
         return new ResponseEntity<>(diaryResponseDtos, HttpStatus.OK);
     }
 
+    @GetMapping("/{userId}/diaries")
+    public ResponseEntity<?> getDiariesByUserId(@PathVariable Long userId) {
+        List<DiaryResponseDto> diaryResponseDtos = diaryService.getDiariesByUserId(userId);
+
+        return new ResponseEntity<>(diaryResponseDtos, HttpStatus.OK);
+    }
+
     // 페이지네이션
     @GetMapping("/pagination/{nickname}")
     public ResponseEntity<?> getPageDiaries(@PathVariable String nickname, @Positive @RequestParam int page) {
