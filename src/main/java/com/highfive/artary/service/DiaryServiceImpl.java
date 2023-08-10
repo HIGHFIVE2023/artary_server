@@ -38,7 +38,18 @@ public class DiaryServiceImpl implements DiaryService {
         User user = userRepository.findByEmail(email).orElseThrow(() ->
                 new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
-        List<Diary> diaries = user.getDiaries();
+        return convertToResponseDto(user.getDiaries());
+    }
+
+    @Override
+    public List<DiaryResponseDto> getDiariesByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+
+        return convertToResponseDto(user.getDiaries());
+    }
+
+    private List<DiaryResponseDto> convertToResponseDto(List<Diary> diaries) {
         List<DiaryResponseDto> diaryResponseDtos = new ArrayList<>();
 
         for (Diary diary : diaries) {

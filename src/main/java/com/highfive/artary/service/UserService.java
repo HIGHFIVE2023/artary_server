@@ -117,4 +117,10 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
+    public Long findUserIdByNickname(String nickname) {
+        User user = userRepository.findByNickname(nickname).orElseThrow(() ->
+                new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+
+        return user.getId();
+    }
 }

@@ -184,6 +184,14 @@ public class UserController {
         }
     }
 
+    // 닉네임으로 회원 정보 찾기
+    @GetMapping("/findUser/{nickname}")
+    public ResponseEntity<?> findUserIdByNickname(@PathVariable String nickname) {
+        Long id = userService.findUserIdByNickname(nickname);
+
+        return ResponseEntity.ok(id);
+    }
+
     private Map<String, String> getErrorMap(BindingResult bindingResult) {
         Map<String, String> errorMap = new HashMap<>();
         for (FieldError error : bindingResult.getFieldErrors()) {
