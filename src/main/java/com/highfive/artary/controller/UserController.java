@@ -68,7 +68,7 @@ public class UserController {
         return ResponseEntity.ok(userService.checkNicknameDuplication(nickname));
     }
 
-    // 비밀번호를 찾기
+    // 비밀번호 찾기
     @PostMapping("/password")
     @ResponseBody
     public ResponseEntity<?> mailConfirm(@RequestParam String email){
@@ -93,7 +93,6 @@ public class UserController {
     public ResponseEntity<String> findEmail(@RequestParam String name, @RequestParam String nickname){
         Optional<String> result = userService.findEmail(name, nickname);
         return result.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-
     }
 
     // 회원 탈퇴

@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,10 +25,12 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Component
 public class TokenProvider {
-    private String secretKey = "myprojectsecret";
+    @Value("${myproject.secretKey}")
+    private String secretKey;
 
     // 토큰 유효시간 30분
-    private long tokenValidTime = 30 * 60 * 1000L;
+    @Value("${myproject.tokenValidTime}")
+    private long tokenValidTime;
 
     private final UserDetailsService userDetailsService;
 
@@ -64,7 +67,6 @@ public class TokenProvider {
                 .getBody();
 
         return claims.getSubject();
-//        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
     }
 
     // Request의 Header에서 token 값을 가져옵니다. "Authorization" : "TOKEN값'
