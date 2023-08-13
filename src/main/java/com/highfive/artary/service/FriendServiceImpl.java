@@ -97,7 +97,7 @@ public class FriendServiceImpl implements FriendService {
 
         // 알림 생성
         String content = fromUser.getNickname() + "님이 친구 신청을 했습니다.";
-        String url = "http://localhost:3000/alarm";
+        String url = "http://localhost:3000/mypage";
 
         notificationService.send(toUser, NotificationType.FRIEND, content, url);
 
@@ -122,7 +122,7 @@ public class FriendServiceImpl implements FriendService {
         User toUser = findUserById(toUserId);
         String reply = areWeFriend ? "수락" : "거절";
         String content = fromUser.getNickname() + "님이 친구 신청을 " + reply + "했습니다.";
-        String url = "http://localhost:3000/alarm";
+        String url = "http://localhost:3000/mypage";
 
         notificationService.send(toUser, NotificationType.FRIEND, content, url);
     }
@@ -147,7 +147,7 @@ public class FriendServiceImpl implements FriendService {
         User toUser = findUserById(toUserId);
 
         String content = fromUser.getNickname() + "님이 친구를 삭제했습니다.";
-        String url = "";
+        String url = "http://localhost:3000/mypage";
 
         notificationService.send(toUser, NotificationType.FRIEND, content, url);
     }
