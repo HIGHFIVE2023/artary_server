@@ -65,14 +65,18 @@ public class DiaryController {
     }
 
     @GetMapping("/{diary_id}")
-    public ResponseEntity<?> getDiary(@PathVariable Long diary_id, Model model) {
-        DiaryResponseDto diaryResponseDto = diaryService.getById(diary_id);
-        model.addAttribute("diary", diaryResponseDto);
+    public ResponseEntity<?> getDiary(@AuthenticationPrincipal String email, @PathVariable Long diary_id, Model model) {
+        if (hasPermissionToAccessDiary(email, diary_id)) {
+            DiaryResponseDto diaryResponseDto = diaryService.getById(diary_id);
+            model.addAttribute("diary", diaryResponseDto);
 
-        List<StickerResponseDto> stickerListDto = stickerService.findAllByDiary(diary_id);
-        model.addAttribute("stickerList", stickerListDto);
+            List<StickerResponseDto> stickerListDto = stickerService.findAllByDiary(diary_id);
+            model.addAttribute("stickerList", stickerListDto);
 
-        return new ResponseEntity<>(diaryService.getById(diary_id), HttpStatus.OK);
+            return new ResponseEntity<>(diaryService.getById(diary_id), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Access denied", HttpStatus.FORBIDDEN);
+        }
     }
 
     @GetMapping("/temporary/{diary_id}")
@@ -212,4 +216,17 @@ public class DiaryController {
         return ResponseEntity.ok(user_id);
     }
 
+    // 접근 권한 확인
+    @GetMapping("/list/{nickname}/checkPermission")
+    public ResponseEntity<Boolean> checkPermission(@AuthenticationPrincipal String email, @PathVariable String nickname) {
+        boolean hasPermission = diaryService.checkPermissionToAccessList(email, nickname);
+
+        return ResponseEntity.ok(hasPermission);
+    }
+
+    private boolean hasPermissionToAccessDiary(String email, Long diaryId) {
+        boolean hasPermission = diaryService.checkPermissionToAccessDiary(email, diaryId);
+
+        return hasPermission;
+    }
 }
