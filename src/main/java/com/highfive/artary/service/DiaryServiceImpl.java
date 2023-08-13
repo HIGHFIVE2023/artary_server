@@ -27,8 +27,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public DiaryResponseDto getById(Long diary_id) {
-        Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
-                new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
+        Diary diary = getDiaryById(diary_id);
 
         return new DiaryResponseDto(diary);
     }
@@ -71,8 +70,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public List<StickerResponseDto> getStickers(Long diaryId) {
-        Diary diary = diaryRepository.findById(diaryId).orElseThrow(() ->
-                new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
+        Diary diary = getDiaryById(diaryId);
 
         List<Sticker> stickers = diary.getStickers();
         List<StickerResponseDto> stickerResponseDtos = new ArrayList<>();
@@ -107,8 +105,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public void update(Long diary_id) {
-        Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+        Diary diary = getDiaryById(diary_id);
 
         TemporaryDiary temporaryDiary = temporaryDiaryRepository.findById(diary_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
@@ -119,8 +116,22 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     public void delete(Long diary_id) {
-        Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
-                new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
+        Diary diary = getDiaryById(diary_id);
         diaryRepository.delete(diary);
+    }
+
+    @Override
+    public Long getUserIdByDiaryId(Long diary_id) {
+        Diary diary = getDiaryById(diary_id);
+        Long user_id = diary.getUser().getId();
+
+        return user_id;
+    }
+
+    private Diary getDiaryById(Long diary_id) {
+        Diary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
+                new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
+
+        return diary;
     }
 }

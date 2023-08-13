@@ -29,4 +29,6 @@ public interface DiaryService {
 
     // 일기 삭제
     void delete(Long diary_id);
+
+    Long getUserIdByDiaryId(Long diary_id);
 }

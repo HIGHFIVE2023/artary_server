@@ -205,4 +205,11 @@ public class DiaryController {
         }
     }
 
+    @GetMapping("/{diary_id}/findUser")
+    public ResponseEntity<Long> findUserByDiary(@PathVariable Long diary_id) {
+        Long user_id = diaryService.getUserIdByDiaryId(diary_id);
+
+        return ResponseEntity.ok(user_id);
+    }
+
 }
