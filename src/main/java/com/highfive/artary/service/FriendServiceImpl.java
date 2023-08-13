@@ -20,12 +20,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FriendServiceImpl implements FriendService {
 
-    @Autowired
     private final UserRepository userRepository;
-    @Autowired
     private final FriendRepository friendRepository;
 
-    @Autowired
     private final NotificationService notificationService;
 
     @Override

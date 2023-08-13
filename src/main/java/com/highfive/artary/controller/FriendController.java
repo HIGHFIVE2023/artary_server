@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping("friend")
 public class FriendController {
 
-    @Autowired
+
     private final FriendService friendService;
 
     private final UserRepository userRepository;

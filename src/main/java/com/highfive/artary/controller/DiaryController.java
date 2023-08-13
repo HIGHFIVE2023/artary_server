@@ -33,19 +33,12 @@ import java.util.Map;
 @RequestMapping("diary")
 public class DiaryController {
 
-    @Autowired
     private final DiaryService diaryService;
-    @Autowired
     private final TemporaryDiaryService temporaryDiaryService;
-    @Autowired
     private final StickerService stickerService;
-    @Autowired
     private final StableDiffusionService stablediffusionService;
-    @Autowired
     private final ClovaSummaryService clovaSummaryService;
-    @Autowired
     private final PapagoTranslationService papagoTranslationService;
-    @Autowired
     private final FirstSentenceService firstSentenceService;
 
     // 임시 저장

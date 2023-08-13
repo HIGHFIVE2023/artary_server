@@ -1,11 +1,9 @@
 package com.highfive.artary.service;
 
 import com.highfive.artary.domain.Diary;
-import com.highfive.artary.dto.diary.DiaryRequestDto;
 import com.highfive.artary.dto.diary.DiaryResponseDto;
 import com.highfive.artary.dto.sticker.StickerResponseDto;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -32,7 +30,7 @@ public interface DiaryService {
 
     Long getUserIdByDiaryId(Long diary_id);
 
-    // 접근 권환 체크
+    // 접근 권한 체크
     boolean checkPermissionToAccessDiary(String email, Long diary_d);
     boolean checkPermissionToAccessList(String email, String nickname);
 }
