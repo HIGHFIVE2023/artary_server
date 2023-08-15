@@ -19,9 +19,7 @@ import java.util.List;
 @RequestMapping("/notifications")
 public class NotificationController {
 
-    @Autowired
     private final NotificationService notificationService;
-    @Autowired
     private final UserRepository userRepository;
 
     @GetMapping(value = "/subscribe/{email}", produces = "text/event-stream")

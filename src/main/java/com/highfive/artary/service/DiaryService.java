@@ -27,4 +27,10 @@ public interface DiaryService {
 
     // 일기 삭제
     void delete(Long diary_id);
+
+    Long getUserIdByDiaryId(Long diary_id);
+
+    // 접근 권한 체크
+    boolean checkPermissionToAccessDiary(String email, Long diary_d);
+    boolean checkPermissionToAccessList(String email, String nickname);
 }
