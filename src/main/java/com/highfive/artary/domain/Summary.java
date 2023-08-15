@@ -1,6 +1,5 @@
 package com.highfive.artary.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;

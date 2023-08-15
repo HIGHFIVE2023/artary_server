@@ -1,7 +1,6 @@
 package com.highfive.artary.service;
 
 import com.highfive.artary.domain.*;
-import com.highfive.artary.dto.diary.DiaryRequestDto;
 import com.highfive.artary.dto.diary.DiaryResponseDto;
 import com.highfive.artary.dto.sticker.StickerResponseDto;
 import com.highfive.artary.repository.DiaryRepository;
@@ -10,7 +9,6 @@ import com.highfive.artary.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +36,18 @@ public class DiaryServiceImpl implements DiaryService {
         User user = userRepository.findByEmail(email).orElseThrow(() ->
                 new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
 
-        List<Diary> diaries = user.getDiaries();
+        return convertToResponseDto(user.getDiaries());
+    }
+
+    @Override
+    public List<DiaryResponseDto> getDiariesByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+
+        return convertToResponseDto(user.getDiaries());
+    }
+
+    private List<DiaryResponseDto> convertToResponseDto(List<Diary> diaries) {
         List<DiaryResponseDto> diaryResponseDtos = new ArrayList<>();
 
         for (Diary diary : diaries) {

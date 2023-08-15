@@ -1,10 +1,9 @@
 package com.highfive.artary.service;
 
-import com.highfive.artary.domain.Diary;
+
 import com.highfive.artary.domain.TemporaryDiary;
 import com.highfive.artary.dto.stablediffusion.StableDiffusionRequestDto;
 import com.highfive.artary.dto.stablediffusion.StableDiffusionResponseDto;
-import com.highfive.artary.repository.DiaryRepository;
 import com.highfive.artary.repository.TemporaryDiaryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

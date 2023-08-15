@@ -136,14 +136,15 @@ public class UserController {
         try {
             String token = tokenProvider.createToken(member.getUsername());
 
-            UserDto responseDto = new UserDto();
-            responseDto.setToken(token);
-            responseDto.setUserId(member.getId());
-            responseDto.setName(member.getName());
-            responseDto.setNickname(member.getNickname());
-            responseDto.setEmail(member.getEmail());
-            responseDto.setAuth(member.getAuth());
-            responseDto.setImage(member.getImage());
+            UserDto responseDto = UserDto.builder()
+                    .token(token)
+                    .userId(member.getId())
+                    .name(member.getName())
+                    .nickname(member.getNickname())
+                    .email(member.getEmail())
+                    .auth(member.getAuth())
+                    .image(member.getImage())
+                    .build();
 
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
@@ -181,6 +182,14 @@ public class UserController {
                         .body(Collections.singletonMap("error", "사용자 정보 수정 실패"));
             }
         }
+    }
+
+    // 닉네임으로 회원 정보 찾기
+    @GetMapping("/findUser/{nickname}")
+    public ResponseEntity<?> findUserIdByNickname(@PathVariable String nickname) {
+        Long id = userService.findUserIdByNickname(nickname);
+
+        return ResponseEntity.ok(id);
     }
 
     private Map<String, String> getErrorMap(BindingResult bindingResult) {

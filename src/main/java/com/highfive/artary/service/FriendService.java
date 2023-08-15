@@ -3,7 +3,6 @@ package com.highfive.artary.service;
 import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.FriendDto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public interface FriendService {

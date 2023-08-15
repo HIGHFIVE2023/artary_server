@@ -1,9 +1,8 @@
 package com.highfive.artary.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.highfive.artary.domain.Diary;
 import com.highfive.artary.domain.FirstSentence;
-import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.diary.*;
 import com.highfive.artary.dto.sticker.StickerResponseDto;
 import com.highfive.artary.dto.textGeneration.FirstSentenceRequestDto;
@@ -13,12 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
@@ -89,6 +85,13 @@ public class DiaryController {
     @GetMapping("/diaries")
     public ResponseEntity<?> getDiaries(@AuthenticationPrincipal String email) {
         List<DiaryResponseDto> diaryResponseDtos = diaryService.getDiaries(email);
+
+        return new ResponseEntity<>(diaryResponseDtos, HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/diaries")
+    public ResponseEntity<?> getDiariesByUserId(@PathVariable Long userId) {
+        List<DiaryResponseDto> diaryResponseDtos = diaryService.getDiariesByUserId(userId);
 
         return new ResponseEntity<>(diaryResponseDtos, HttpStatus.OK);
     }

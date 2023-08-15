@@ -1,13 +1,11 @@
 package com.highfive.artary.service;
 
-import com.highfive.artary.domain.Diary;
 import com.highfive.artary.domain.Summary;
 import com.highfive.artary.domain.TemporaryDiary;
 import com.highfive.artary.dto.ClovaSummary.ClovaSummaryRequestDto;
 import com.highfive.artary.dto.ClovaSummary.ClovaSummaryResponseDto;
 import com.highfive.artary.dto.ClovaSummary.DocumentObject;
 import com.highfive.artary.dto.ClovaSummary.OptionObject;
-import com.highfive.artary.repository.DiaryRepository;
 import com.highfive.artary.repository.SummaryRepository;
 import com.highfive.artary.repository.TemporaryDiaryRepository;
 import lombok.RequiredArgsConstructor;

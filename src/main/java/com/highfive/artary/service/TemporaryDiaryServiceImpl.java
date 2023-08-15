@@ -1,6 +1,5 @@
 package com.highfive.artary.service;
 
-import com.highfive.artary.domain.Diary;
 import com.highfive.artary.domain.Summary;
 import com.highfive.artary.domain.TemporaryDiary;
 import com.highfive.artary.domain.User;
