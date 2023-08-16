@@ -3,6 +3,7 @@ package com.highfive.artary.service;
 import com.highfive.artary.domain.User;
 import com.highfive.artary.dto.UserDto;
 import com.highfive.artary.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,14 +21,11 @@ import java.util.Optional;
 
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
-
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -45,8 +43,7 @@ public class UserService implements UserDetailsService {
 
     public Long save(UserDto userDto) throws Exception{
 
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        String encodedPassword = encoder.encode(userDto.getPassword());
+       PasswordEncoder encoder = new BCryptPasswordEncoder();
 
         return userRepository.save(User.builder()
                 .name(userDto.getName())
@@ -54,7 +51,7 @@ public class UserService implements UserDetailsService {
                 .email(userDto.getEmail())
                 .auth(userDto.getAuth())
                 .image(userDto.getImage())
-                .password(encodedPassword).build()).getId();
+                .password(encoder.encode(userDto.getPassword())).build()).getId();
     }
 
     public boolean checkEmailDuplication(String email) {
@@ -80,7 +77,6 @@ public class UserService implements UserDetailsService {
             existingUser.setNickname(userDto.getNickname());
             existingUser.setImage(userDto.getImage());
             existingUser.setPassword(encoder.encode(userDto.getPassword()));
-            existingUser.setUpdatedAt(LocalDateTime.now());
 
             userRepository.save(existingUser);
         } catch (NoSuchElementException e) {
@@ -94,7 +90,6 @@ public class UserService implements UserDetailsService {
 
             User existingUser = userRepository.findById(userId).orElseThrow();
             existingUser.setPassword(encoder.encode(newPassword));
-            existingUser.setUpdatedAt(LocalDateTime.now());
 
             userRepository.save(existingUser);
         } catch (NoSuchElementException e) {

@@ -4,6 +4,7 @@ import com.highfive.artary.security.Custom403Handler;
 import com.highfive.artary.security.JwtAuthenticationFilter;
 import com.highfive.artary.security.TokenProvider;
 import com.highfive.artary.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -32,15 +33,13 @@ import java.util.Arrays;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private TokenProvider tokenProvider;
+    private final UserService userService;
+    private final TokenProvider tokenProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
