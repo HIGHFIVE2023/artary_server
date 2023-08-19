@@ -55,13 +55,11 @@ public class UserService implements UserDetailsService {
     }
 
     public boolean checkEmailDuplication(String email) {
-        boolean emailDuplicate = userRepository.existsByEmail(email);
-        return emailDuplicate;
+        return userRepository.existsByEmail(email);
     }
 
     public boolean checkNicknameDuplication(String nickname) {
-        boolean nicknameDuplicate = userRepository.existsByNickname(nickname);
-        return nicknameDuplicate;
+        return userRepository.existsByNickname(nickname);
     }
 
     public Optional<String> findEmail(String name, String nickname){

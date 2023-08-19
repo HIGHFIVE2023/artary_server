@@ -10,7 +10,7 @@ import com.highfive.artary.service.*;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -136,6 +136,7 @@ public class DiaryController {
     public ResponseEntity<?> getPictureV1(@PathVariable Long diary_id) {
         return getPictureResponse(diary_id, "V1");
     }
+
 
     @GetMapping("/{diary_id}/picture/pencil")
     public ResponseEntity<?> getPictureV2(@PathVariable Long diary_id) {
