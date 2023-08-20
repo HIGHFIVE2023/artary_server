@@ -22,6 +22,7 @@ public class DiaryResponseDto {
     private final List<Sticker> stickers;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
+    private final String bgm;
 
     public DiaryResponseDto(Diary diary) {
         this.id = diary.getId();
@@ -33,5 +34,6 @@ public class DiaryResponseDto {
         this.stickers = diary.getStickers();
         this.createdAt = diary.getCreatedAt();
         this.updatedAt = diary.getUpdatedAt();
+        this.bgm = diary.getBgm();
     }
 }
