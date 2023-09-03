@@ -112,13 +112,6 @@ public class UserController {
         }
     }
 
-    // 커스텀 유효성 검증
-    @InitBinder
-    public void validatorBinder(WebDataBinder binder) {
-        binder.addValidators(checkNicknameValidator);
-        binder.addValidators(checkEmailValidator);
-    }
-
     // 로그인
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String, String> userDto) {
@@ -190,6 +183,13 @@ public class UserController {
         Long id = userService.findUserIdByNickname(nickname);
 
         return ResponseEntity.ok(id);
+    }
+
+    // 커스텀 유효성 검증
+    @InitBinder
+    public void validatorBinder(WebDataBinder binder) {
+        binder.addValidators(checkNicknameValidator);
+        binder.addValidators(checkEmailValidator);
     }
 
     private Map<String, String> getErrorMap(BindingResult bindingResult) {

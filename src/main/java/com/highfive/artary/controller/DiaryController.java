@@ -137,6 +137,7 @@ public class DiaryController {
         return getPictureResponse(diary_id, "V1");
     }
 
+
     @GetMapping("/{diary_id}/picture/pencil")
     public ResponseEntity<?> getPictureV2(@PathVariable Long diary_id) {
         return getPictureResponse(diary_id, "V2");

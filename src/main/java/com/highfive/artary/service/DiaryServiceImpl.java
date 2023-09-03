@@ -18,7 +18,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class DiaryServiceImpl implements DiaryService {
     private final DiaryRepository diaryRepository;
     private final TemporaryDiaryRepository temporaryDiaryRepository;

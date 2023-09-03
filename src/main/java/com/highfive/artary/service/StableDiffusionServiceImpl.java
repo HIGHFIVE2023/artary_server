@@ -51,6 +51,7 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
         return imageUrl;
     }
 
+
     private String getImageUrl(Long diary_id, String prompt1, String prompt2) {
         TemporaryDiary diary = diaryRepository.findById(diary_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 일기가 존재하지 않습니다."));
