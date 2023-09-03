@@ -22,13 +22,20 @@ public class Diary extends BaseDiary{
     @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Sticker> stickers = new ArrayList<>();
 
+    private String bgm;
+
     @Builder
-    public Diary(Long id, User user, String title, String content, String image, Emotion emotion) {
+    public Diary(Long id, User user, String title, String content, String image, Emotion emotion, String bgm) {
         super(user, title, content, image, emotion);
         this.id = id;
+        this.bgm = bgm;
     }
 
     public void addSticker(Sticker sticker) {
         stickers.add(sticker);
+    }
+
+    public void updateBgm(String bgm) {
+        this.bgm = bgm;
     }
 }
