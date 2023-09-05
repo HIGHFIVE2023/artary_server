@@ -22,7 +22,7 @@ public class RiffusionService {
 
 //    @Value("${REPLICATE_API_TOKEN}")
 //    private String token;
-    private String token = "r8_SMYE9S1Dgv3Hmby58M2zH3wwnf0qlnD2OOGuo";
+    private String token = "r8_5ZGWMux0RqAKYtF4L5LjPpLVJGy1xRr4I9LFv";
 
     ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
             .codecs(configure -> configure.defaultCodecs().maxInMemorySize(-1))
