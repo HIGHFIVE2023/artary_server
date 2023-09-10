@@ -44,8 +44,8 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
     @Override
     public String getTextToImageV2(Long diary_id) {
         // 그림체 명령어 수정 필요
-        String prompt1 = "pencil color painting of '";
-        String prompt2 = "', minimalism, vaporwave aesthetic, Cute, Energetic, Dreamcore style, vibrant colors";
+        String prompt1 = "Pencil painting of '";
+        String prompt2 = "', highly detailed, vaporwave aesthetic, Energetic, Dreamcore style, vibrant colors, by Enki Bilal";
         String imageUrl = getImageUrl(diary_id, prompt1, prompt2);
 
         return imageUrl;

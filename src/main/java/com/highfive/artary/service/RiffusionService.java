@@ -27,6 +27,7 @@ public class RiffusionService {
     private WebClient client;
     ExchangeStrategies exchangeStrategies;
 
+
     @PostConstruct
     private void init() {
 
