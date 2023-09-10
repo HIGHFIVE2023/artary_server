@@ -18,6 +18,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PapagoTranslationServiceImpl implements PapagoTranslationService {
 

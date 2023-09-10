@@ -11,7 +11,6 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:application.properties")
-@PropertySource("classpath:application-API-KEY.properties")
 public class MailConfig {
 
     @Value("${spring.mail.username}")

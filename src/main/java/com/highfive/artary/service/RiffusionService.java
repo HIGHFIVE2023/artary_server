@@ -1,17 +1,20 @@
 package com.highfive.artary.service;
 
+import com.highfive.artary.config.RiffusionConfig;
 import com.highfive.artary.dto.riffusion.AudioResponseDto;
 import com.highfive.artary.dto.riffusion.RiffusionInputDto;
 import com.highfive.artary.dto.riffusion.RiffusionRequestDto;
 import com.highfive.artary.dto.riffusion.RiffusionResponseDto;
+import com.highfive.artary.repository.EmitterRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+
+import javax.annotation.PostConstruct;
 
 @Slf4j
 @Service
@@ -20,18 +23,23 @@ public class RiffusionService {
 
     private static final String API_URL = "https://api.replicate.com/v1/predictions";
 
-//    @Value("${REPLICATE_API_TOKEN}")
-//    private String token;
-    private String token = "r8_SMYE9S1Dgv3Hmby58M2zH3wwnf0qlnD2OOGuo";
+    private final RiffusionConfig riffusionConfig;
+    private WebClient client;
+    ExchangeStrategies exchangeStrategies;
 
-    ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
-            .codecs(configure -> configure.defaultCodecs().maxInMemorySize(-1))
-            .build();
+    @PostConstruct
+    private void init() {
 
-    private WebClient client = WebClient.builder()
-            .exchangeStrategies(exchangeStrategies)
-            .defaultHeader("Authorization", "Token " + token)
-            .build();
+        String token = riffusionConfig.getToken();
+        exchangeStrategies = ExchangeStrategies.builder()
+                .codecs(configure -> configure.defaultCodecs().maxInMemorySize(-1))
+                .build();
+
+        client = WebClient.builder()
+                .exchangeStrategies(exchangeStrategies)
+                .defaultHeader("Authorization", "Token " + token)
+                .build();
+    }
 
     public String getAudio(String prompt) {
         RiffusionInputDto inputDto = RiffusionInputDto.builder()

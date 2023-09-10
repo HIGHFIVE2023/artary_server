@@ -10,6 +10,7 @@ import com.highfive.artary.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
     private final static Long DEFAULT_TIMEOUT = 60L * 1000 * 60;

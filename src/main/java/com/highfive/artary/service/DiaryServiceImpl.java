@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class DiaryServiceImpl implements DiaryService {
     private final DiaryRepository diaryRepository;

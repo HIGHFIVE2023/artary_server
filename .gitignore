@@ -39,3 +39,6 @@ out/
 ### Stable Diffusion API Key ###
 applications.properties
 application-API-KEY.properties
+
+### Riffusion config ###
+RiffusionConfig.java
