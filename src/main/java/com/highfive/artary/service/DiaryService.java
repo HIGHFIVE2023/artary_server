@@ -15,6 +15,8 @@ public interface DiaryService {
 
     List<DiaryResponseDto> getDiariesByUserId(Long userId);
 
+    List<DiaryResponseDto> getDiariesByUserNickname(String nickname);
+
     Page<Diary> getPageDiaries(String email, int page);
 
     List<StickerResponseDto> getStickers(Long diaryId);

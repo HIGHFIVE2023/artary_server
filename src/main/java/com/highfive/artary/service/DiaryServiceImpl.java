@@ -49,6 +49,14 @@ public class DiaryServiceImpl implements DiaryService {
         return convertToResponseDto(user.getDiaries());
     }
 
+    @Override
+    public List<DiaryResponseDto> getDiariesByUserNickname(String nickname) {
+        User user = userRepository.findByNickname(nickname).orElseThrow(() ->
+                new IllegalArgumentException("해당 사용자가 존재하지 않습니다."));
+
+        return convertToResponseDto(user.getDiaries());
+    }
+
     private List<DiaryResponseDto> convertToResponseDto(List<Diary> diaries) {
         List<DiaryResponseDto> diaryResponseDtos = new ArrayList<>();
 
