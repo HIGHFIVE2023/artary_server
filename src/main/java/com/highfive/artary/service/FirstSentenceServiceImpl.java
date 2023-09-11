@@ -26,7 +26,7 @@ public class FirstSentenceServiceImpl implements FirstSentenceService {
 
     private final FirstSentenceRepository firstSentenceRepository;
 
-    private static final String API_URL = "https://clovastudio.apigw.ntruss.com/testapp/v1/tasks/00v3uuof/completions/LK-D2";
+    private static final String API_URL = "https://clovastudio.apigw.ntruss.com/testapp/v1/tasks/4cdwq7fg/completions/LK-D2";
 
     @Value("${clova.studio.key}")
     private String apiKey;
