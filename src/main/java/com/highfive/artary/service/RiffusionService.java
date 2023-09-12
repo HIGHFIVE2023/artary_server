@@ -98,4 +98,27 @@ public class RiffusionService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    public String getAudioWithRetry(String prompt, int maxRetries) {
+        for (int retry = 0; retry < maxRetries; retry++) {
+            try {
+                String audio = getAudio(prompt);
+                return audio;
+            } catch (Exception e) {
+
+                log.error("Error while fetching audio from Riffusion API: {}", e.getMessage());
+
+                if (retry < maxRetries - 1) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
+        }
+        throw new RuntimeException("Failed to retrieve audio after " + maxRetries + " retries");
+    }
+
+
 }

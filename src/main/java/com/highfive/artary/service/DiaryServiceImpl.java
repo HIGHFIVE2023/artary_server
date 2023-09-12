@@ -101,7 +101,7 @@ public class DiaryServiceImpl implements DiaryService {
                 new IllegalArgumentException("해당 데이터가 존재하지 않습니다."));
 
         String riffusionPrompt = temporaryDiary.getSummary().getEngSummary();
-        String bgm = riffusionService.getAudio(riffusionPrompt);
+        String bgm = riffusionService.getAudioWithRetry(riffusionPrompt, 3);
 
         Diary diary = Diary.builder()
                 .id(diary_id)

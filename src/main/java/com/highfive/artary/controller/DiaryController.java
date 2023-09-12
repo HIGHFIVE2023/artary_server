@@ -151,12 +151,8 @@ public class DiaryController {
     }
 
     private ResponseEntity<?> getPictureResponse(Long diary_id, String version) {
-        int maxAttempts = 10; // 최대 재시도 횟수
-        int attempts = 0;
-
-        while (attempts < maxAttempts) {
+        while (true) {
             try {
-                // 요약 및 번역
                 String summary = clovaSummaryService.summarizeDiary(diary_id);
                 String engSummary = papagoTranslationService.translateSummary(diary_id);
 
@@ -171,29 +167,16 @@ public class DiaryController {
 
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } catch (WebClientRequestException e) {
-                // 재시도 로직을 위해 예외 처리
-                attempts++;
-                if (attempts >= maxAttempts) {
-                    // 최대 재시도 횟수를 초과한 경우
-                    return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-                // 일시적인 연결 문제로 예외가 발생한 경우, 대기 후 재시도
                 try {
-                    Thread.sleep(1000); // 1초 대기 후 재시도
+                    Thread.sleep(1000);
                 } catch (InterruptedException ex) {
-                    // 대기 도중 인터럽트가 발생한 경우 예외 처리
                     Thread.currentThread().interrupt();
                     return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             } catch (Exception e) {
-                // 다른 예외가 발생한 경우
                 return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
-            break;
         }
-
-        // 최대 재시도 횟수를 초과한 경우
-        return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @PostMapping("/firstSentence")
