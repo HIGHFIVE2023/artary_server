@@ -151,34 +151,35 @@ public class DiaryController {
     }
 
     private ResponseEntity<?> getPictureResponse(Long diary_id, String version) {
-        while (true) {
-            try {
-                String summary = clovaSummaryService.summarizeDiary(diary_id);
-                String engSummary = papagoTranslationService.translateSummary(diary_id);
+        String summary = clovaSummaryService.summarizeDiary(diary_id);
+        String engSummary = papagoTranslationService.translateSummary(diary_id);
 
-                temporaryDiaryService.setSummary(diary_id, summary, engSummary);
+        temporaryDiaryService.setSummary(diary_id, summary, engSummary);
 
-                String imageUrl = version.equals("V1") ?
-                        stablediffusionService.getTextToImageV1(diary_id) :
-                        stablediffusionService.getTextToImageV2(diary_id);
+        String imageUrl = null;
 
+        while (imageUrl == null) {
+            imageUrl = version.equals("V1") ?
+                    stablediffusionService.getTextToImageV1(diary_id) :
+                    stablediffusionService.getTextToImageV2(diary_id);
+
+            if (imageUrl != null) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("imageUrl", imageUrl);
-
                 return new ResponseEntity<>(response, HttpStatus.OK);
-            } catch (WebClientRequestException e) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    Thread.currentThread().interrupt();
-                    return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            } catch (Exception e) {
-                // 다른 예외가 발생한 경우
+            }
+
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
                 return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
+
+        return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
 
 
     @PostMapping("/firstSentence")
