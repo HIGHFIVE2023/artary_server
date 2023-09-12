@@ -166,18 +166,19 @@ public class DiaryController {
                 response.put("imageUrl", imageUrl);
 
                 return new ResponseEntity<>(response, HttpStatus.OK);
-            } catch (WebClientRequestException e) {
+            } catch (Exception e) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                     return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
-            } catch (Exception e) {
-                return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
+
+
+
 
     @PostMapping("/firstSentence")
     public ResponseEntity<?> createFirstSentence(@RequestBody FirstSentenceRequestDto requestDto) {
