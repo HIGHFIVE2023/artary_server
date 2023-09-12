@@ -38,7 +38,7 @@ public class DiaryController {
     private final ClovaSummaryService clovaSummaryService;
     private final PapagoTranslationService papagoTranslationService;
     private final FirstSentenceService firstSentenceService;
-    private final RiffusionService riffusionService;
+
 
     // 임시 저장
     @PostMapping("/write")
@@ -166,18 +166,19 @@ public class DiaryController {
                 response.put("imageUrl", imageUrl);
 
                 return new ResponseEntity<>(response, HttpStatus.OK);
-            } catch (Exception e) {
+            } catch (WebClientRequestException e) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                     return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
+            } catch (Exception e) {
+                // 다른 예외가 발생한 경우
+                return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
     }
-
-
 
 
     @PostMapping("/firstSentence")
