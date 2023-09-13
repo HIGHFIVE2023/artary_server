@@ -151,32 +151,40 @@ public class DiaryController {
     }
 
     private ResponseEntity<?> getPictureResponse(Long diary_id, String version) {
-        String summary = clovaSummaryService.summarizeDiary(diary_id);
-        String engSummary = papagoTranslationService.translateSummary(diary_id);
+        int maxAttempts = 10; // 최대 재시도 횟수
+        int attempts = 0;
 
-        temporaryDiaryService.setSummary(diary_id, summary, engSummary);
+        while (attempts < maxAttempts) {
+            try {
+                String summary = clovaSummaryService.summarizeDiary(diary_id);
+                String engSummary = papagoTranslationService.translateSummary(diary_id);
 
-        String imageUrl = null;
+                temporaryDiaryService.setSummary(diary_id, summary, engSummary);
 
-        while (imageUrl == null) {
-            imageUrl = version.equals("V1") ?
-                    stablediffusionService.getTextToImageV1(diary_id) :
-                    stablediffusionService.getTextToImageV2(diary_id);
+                String imageUrl = version.equals("V1") ?
+                        stablediffusionService.getTextToImageV1(diary_id) :
+                        stablediffusionService.getTextToImageV2(diary_id);
 
-            if (imageUrl != null) {
                 Map<String, Object> response = new HashMap<>();
                 response.put("imageUrl", imageUrl);
-                return new ResponseEntity<>(response, HttpStatus.OK);
-            }
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {
-                Thread.currentThread().interrupt();
+                return new ResponseEntity<>(response, HttpStatus.OK);
+            } catch (WebClientRequestException e) {
+                attempts++;
+                if (attempts >= maxAttempts) {
+                    return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                    return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
+                }
+            } catch (Exception e) {
                 return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
+            break;
         }
-
         return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
