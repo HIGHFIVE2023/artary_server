@@ -26,7 +26,8 @@ public class FirstSentenceServiceImpl implements FirstSentenceService {
 
     private final FirstSentenceRepository firstSentenceRepository;
 
-    private static final String API_URL = "https://clovastudio.apigw.ntruss.com/testapp/v1/tasks/4cdwq7fg/completions/LK-D2";
+    @Value("${clova.studio.url}")
+    private String API_URL;
 
     @Value("${clova.studio.key}")
     private String apiKey;
@@ -70,13 +71,13 @@ public class FirstSentenceServiceImpl implements FirstSentenceService {
 
         TextGenerationRequestDto requestBody = new TextGenerationRequestDto();
         requestBody.setIncludeAiFilters(true);
-        requestBody.setIncludeTokens(false);
-        requestBody.setMaxTokens(300);
+        requestBody.setIncludeTokens(true);
+        requestBody.setMaxTokens(100);
         requestBody.setRepeatPenalty(5.0);
         requestBody.setRestart("");
         requestBody.setStart("");
         requestBody.setStopBefore(Collections.singletonList("<|empty list|>"));
-        requestBody.setTemperature(0.85);
+        requestBody.setTemperature(0.5);
         requestBody.setText(text);
         requestBody.setTopK(4);
         requestBody.setTopP(0.8);
