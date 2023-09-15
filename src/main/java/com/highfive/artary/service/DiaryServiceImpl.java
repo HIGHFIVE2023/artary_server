@@ -100,8 +100,9 @@ public class DiaryServiceImpl implements DiaryService {
         TemporaryDiary temporaryDiary = temporaryDiaryRepository.findById(diary_id).orElseThrow(() ->
                 new IllegalArgumentException("해당 데이터가 존재하지 않습니다."));
 
+        int emotion = temporaryDiary.getEmotion().ordinal();
         String riffusionPrompt = temporaryDiary.getSummary().getEngSummary();
-        String bgm = riffusionService.getAudioWithRetry(riffusionPrompt, 3);
+        String bgm = riffusionService.getAudioWithRetry(riffusionPrompt, 3, emotion);
 
         Diary diary = Diary.builder()
                 .id(diary_id)
@@ -124,7 +125,8 @@ public class DiaryServiceImpl implements DiaryService {
                 new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
 
         String riffusionPrompt = temporaryDiary.getSummary().getEngSummary();
-        String bgm = riffusionService.getAudio(riffusionPrompt);
+        int emotion = temporaryDiary.getEmotion().ordinal();
+        String bgm = riffusionService.getAudio(riffusionPrompt, emotion);
 
         diary.update(temporaryDiary.getTitle(), temporaryDiary.getContent(), temporaryDiary.getEmotion());
         diary.updateBgm(bgm);
