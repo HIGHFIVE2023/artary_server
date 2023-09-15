@@ -42,14 +42,57 @@ public class RiffusionService {
                 .build();
     }
 
-    public String getAudio(String prompt) {
+    public String getPrompt(int emotion){
+        String prompt_b = "";
+        switch (emotion) {
+            case 0:
+                prompt_b = "happy, pop, Guitar";
+                break;
+            case 1:
+                prompt_b = "angry, rock, drum";
+                break;
+            case 2:
+                prompt_b = "sad, piano, ballad, gloomy, Melancholy";
+                break;
+            case 3:
+                prompt_b = "Acoustic Guitar, pop";
+                break;
+        }
+
+        return prompt_b;
+    }
+
+    public String setSeed(int emotion) {
+        String seed_image = "";
+        switch (emotion) {
+            case 0:
+                seed_image = "vibes";
+                break;
+            case 1:
+                seed_image = "marim";
+                break;
+            case 2:
+                seed_image = "agile";
+                break;
+            case 3:
+                seed_image = "motorway";
+                break;
+        }
+
+        return seed_image;
+    }
+
+    public String getAudio(String prompt, int emotion) {
+        String prompt_b = getPrompt(emotion);
+        String seed_image = setSeed(emotion);
+
         RiffusionInputDto inputDto = RiffusionInputDto.builder()
                 .prompt_a(prompt)
                 .denoising(0.75)
-                .prompt_b("funky synth solo")
+                .prompt_b(prompt_b)
                 .alpha(0.5)
                 .num_inference_steps(50)
-                .seed_image_id("vibes")
+                .seed_image_id(seed_image)
                 .build();
 
         RiffusionRequestDto requestDto = RiffusionRequestDto.builder()
@@ -99,10 +142,10 @@ public class RiffusionService {
         }
     }
 
-    public String getAudioWithRetry(String prompt, int maxRetries) {
+    public String getAudioWithRetry(String prompt, int maxRetries, int emotion) {
         for (int retry = 0; retry < maxRetries; retry++) {
             try {
-                String audio = getAudio(prompt);
+                String audio = getAudio(prompt, emotion);
                 return audio;
             } catch (Exception e) {
 
