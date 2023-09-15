@@ -52,7 +52,7 @@ public class RiffusionService {
                 prompt_b = "angry, rock, drum";
                 break;
             case 2:
-                prompt_b = "sad, piano, ballad, gloomy, Melancholy";
+                prompt_b = "sad, classical, piano solo, ballad, gloomy, Melancholy";
                 break;
             case 3:
                 prompt_b = "Acoustic Guitar, pop";
@@ -90,7 +90,7 @@ public class RiffusionService {
                 .prompt_a(prompt)
                 .denoising(0.75)
                 .prompt_b(prompt_b)
-                .alpha(0.5)
+                .alpha(0.75)
                 .num_inference_steps(50)
                 .seed_image_id(seed_image)
                 .build();
