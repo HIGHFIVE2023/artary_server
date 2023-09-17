@@ -12,8 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import org.springframework.transaction.annotation.Transactional;
+
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class StableDiffusionServiceImpl implements StableDiffusionService {
 
