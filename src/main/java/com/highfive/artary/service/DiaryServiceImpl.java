@@ -102,7 +102,7 @@ public class DiaryServiceImpl implements DiaryService {
 
         int emotion = temporaryDiary.getEmotion().ordinal();
         String riffusionPrompt = temporaryDiary.getSummary().getEngSummary();
-        String bgm = riffusionService.getAudioWithRetry(riffusionPrompt, 3, emotion);
+        String bgm = getBgmWithRetry(riffusionPrompt, emotion);
 
         Diary diary = Diary.builder()
                 .id(diary_id)
@@ -115,6 +115,14 @@ public class DiaryServiceImpl implements DiaryService {
                 .build();
 
         return diaryRepository.save(diary).getId();
+    }
+
+    private String getBgmWithRetry(String riffusionPrompt, int emotion) {
+        try {
+            return riffusionService.getAudioWithRetry(riffusionPrompt, 3, emotion);
+        } catch (Exception e) {
+            throw new RuntimeException("BGM 가져오기에 실패했습니다.", e);
+        }
     }
 
     @Override
