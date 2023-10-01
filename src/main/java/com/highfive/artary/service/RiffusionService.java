@@ -46,16 +46,16 @@ public class RiffusionService {
         String prompt_b = "";
         switch (emotion) {
             case 0:
-                prompt_b = "happy, pop, Guitar";
+                prompt_b = "upbeat and joyful melodies with a lively rhythm";
                 break;
             case 1:
-                prompt_b = "angry, rock, drum";
+                prompt_b = "aggressive heavy metal with roaring guitars";
                 break;
             case 2:
-                prompt_b = "sad, classical, piano solo, ballad, gloomy, Melancholy";
+                prompt_b = "soulful violin melodies with emotive harmonies";
                 break;
             case 3:
-                prompt_b = "Acoustic Guitar, pop";
+                prompt_b = "deep, smooth synthwave with a dream-like atmosphere";
                 break;
         }
 

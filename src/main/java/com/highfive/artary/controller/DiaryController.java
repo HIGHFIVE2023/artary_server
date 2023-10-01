@@ -172,19 +172,15 @@ public class DiaryController {
             } catch (Exception e) {
                 attempts++;
                 if (attempts >= maxAttempts) {
-                    // 로깅
                     log.error("Failed to get the picture after {} attempts. Error: {}", attempts, e.getMessage());
                     return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
-
-                // 로깅
                 log.warn("Failed to get the picture on attempt {}. Retrying...", attempts);
 
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
-                    // 로깅
                     log.error("Thread interrupted while retrying. Error: {}", ex.getMessage());
                     return new ResponseEntity<>("Failed to get the picture.", HttpStatus.INTERNAL_SERVER_ERROR);
                 }
