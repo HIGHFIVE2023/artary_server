@@ -8,6 +8,7 @@ import lombok.Data;
 public class StableDiffusionRequestDto {
 
     private String key;
+    private String model_id;
     private String prompt;
     private String negative_prompt;
     private int width;

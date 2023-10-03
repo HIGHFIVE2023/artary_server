@@ -38,7 +38,7 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
     @Override
     public String getTextToImageV1(Long diary_id) {
         String prompt1 = "water color painting of '";
-        String prompt2 = "', minimalism, vaporwave aesthetic, Cute, Energetic, Dreamcore style, vibrant colors";
+        String prompt2 = "', minimalism, 8K, vaporwave aesthetic, Cute, Energetic, Dreamcore style, vibrant colors";
         String imageUrl = getImageUrl(diary_id, prompt1, prompt2);
 
         return imageUrl;
@@ -46,9 +46,8 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
 
     @Override
     public String getTextToImageV2(Long diary_id) {
-        // 그림체 명령어 수정 필요
         String prompt1 = "Pencil painting of '";
-        String prompt2 = "', highly detailed, vaporwave aesthetic, Energetic, Dreamcore style, vibrant colors, by Enki Bilal";
+        String prompt2 = "8K, highly detailed, vaporwave aesthetic, Energetic, Dreamcore style, vibrant colors, by Enki Bilal";
         String imageUrl = getImageUrl(diary_id, prompt1, prompt2);
 
         return imageUrl;
@@ -66,6 +65,11 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
 
         StableDiffusionRequestDto requestDto = StableDiffusionRequestDto.builder()
                 .key(key)
+                .model_id("dream-shaper-8797")
+                .negative_prompt("painting, extra fingers, mutated hands, poorly drawn hands," +
+                        " poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions," +
+                        " extra limbs, cloned face, skinny, glitchy, double torso, extra arms," +
+                        " extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, anime")
                 .prompt(prompt1)
                 .width(512)
                 .height(512)
