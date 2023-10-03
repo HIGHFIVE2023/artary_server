@@ -65,19 +65,18 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
 
         StableDiffusionRequestDto requestDto = StableDiffusionRequestDto.builder()
                 .key(key)
-                .model_id("dream-shaper-8797")
-                .negative_prompt("painting, extra fingers, mutated hands, poorly drawn hands," +
-                        " poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions," +
-                        " extra limbs, cloned face, skinny, glitchy, double torso, extra arms," +
-                        " extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, anime")
+                .model_id("coloring-pages")
                 .prompt(prompt1)
+                .negative_prompt("(child:1.5), ((((underage)))), ((((child)))), (((kid))), (((preteen))), (teen:1.5) ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face, blurry, draft, grainy")
                 .width(512)
                 .height(512)
                 .samples(1)
                 .num_inference_steps(20)
                 .guidance_scale(7.5)
                 .safety_checker("yes")
+                .scheduler("DDPMScheduler")
                 .build();
+
 
         String imageUrl = client.post()
                 .bodyValue(requestDto)

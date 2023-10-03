@@ -20,4 +20,5 @@ public class StableDiffusionRequestDto {
     private String safety_checker;
     private String webhook;
     private String track_id;
+    private String scheduler;
 }
