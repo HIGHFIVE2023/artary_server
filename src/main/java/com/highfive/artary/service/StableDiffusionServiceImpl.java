@@ -38,7 +38,7 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
     @Override
     public String getTextToImageV1(Long diary_id) {
         String prompt1 = "water color painting of '";
-        String prompt2 = "', minimalism, 8K, vaporwave aesthetic, Cute, Energetic, Dreamcore style, vibrant colors";
+        String prompt2 = "8K, minimalism, 8K, vaporwave aesthetic, Cute, Energetic, Dreamcore style, vibrant colors";
         String imageUrl = getImageUrl(diary_id, prompt1, prompt2);
 
         return imageUrl;
@@ -67,7 +67,12 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
                 .key(key)
                 .model_id("coloring-pages")
                 .prompt(prompt1)
-                .negative_prompt("(child:1.5), ((((underage)))), ((((child)))), (((kid))), (((preteen))), (teen:1.5) ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, out of frame, extra limbs, disfigured, deformed, body out of frame, bad anatomy, watermark, signature, cut off, low contrast, underexposed, overexposed, bad art, beginner, amateur, distorted face, blurry, draft, grainy")
+                .negative_prompt("(child:1.5), ((((underage)))), ((((child)))), (((kid)))," +
+                        " (((preteen))), (teen:1.5) ugly, tiling, poorly drawn hands," +
+                        " poorly drawn feet, poorly drawn face, out of frame, extra limbs," +
+                        " disfigured, deformed, body out of frame, bad anatomy, watermark," +
+                        " signature, cut off, low contrast, underexposed, overexposed, bad art," +
+                        " beginner, amateur, distorted face, blurry, draft, grainy")
                 .width(512)
                 .height(512)
                 .samples(1)
