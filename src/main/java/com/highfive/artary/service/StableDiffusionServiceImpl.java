@@ -38,7 +38,7 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
     @Override
     public String getTextToImageV1(Long diary_id) {
         String prompt1 = "water color painting of '";
-        String prompt2 = "minimalism, 8K, vaporwave aesthetic, Cute, Energetic, Dreamcore style, vibrant colors";
+        String prompt2 = "minimalism, vaporwave aesthetic, Cute, Energetic, Dreamcore style, vibrant colors, 8K";
         String imageUrl = getImageUrl(diary_id, prompt1, prompt2);
 
         return imageUrl;
@@ -65,7 +65,6 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
 
         StableDiffusionRequestDto requestDto = StableDiffusionRequestDto.builder()
                 .key(key)
-                .model_id("coloring-pages")
                 .prompt(prompt1)
                 .negative_prompt("painting, extra fingers, mutated hands, poorly drawn hands," +
                         " poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions," +
@@ -77,7 +76,6 @@ public class StableDiffusionServiceImpl implements StableDiffusionService {
                 .num_inference_steps(20)
                 .guidance_scale(7.5)
                 .safety_checker("yes")
-                .scheduler("DDPMScheduler")
                 .build();
 
 
