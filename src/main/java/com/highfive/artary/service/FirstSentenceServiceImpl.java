@@ -67,13 +67,13 @@ public class FirstSentenceServiceImpl implements FirstSentenceService {
 
         FirstSentence firstSentence = firstSentenceRepository.getById(userInput);
 
-        String text = firstSentence.getInputWords();
+        String text = "키워드: " + firstSentence.getInputWords();
 
         TextGenerationRequestDto requestBody = new TextGenerationRequestDto();
         requestBody.setIncludeAiFilters(true);
         requestBody.setIncludeTokens(true);
-        requestBody.setMaxTokens(100);
-        requestBody.setRepeatPenalty(5.0);
+        requestBody.setMaxTokens(64);
+        requestBody.setRepeatPenalty(2.0);
         requestBody.setRestart("");
         requestBody.setStart("");
         requestBody.setStopBefore(Collections.singletonList("<|empty list|>"));
