@@ -72,7 +72,7 @@ public class FirstSentenceServiceImpl implements FirstSentenceService {
         TextGenerationRequestDto requestBody = new TextGenerationRequestDto();
         requestBody.setIncludeAiFilters(true);
         requestBody.setIncludeTokens(true);
-        requestBody.setMaxTokens(64);
+        requestBody.setMaxTokens(32);
         requestBody.setRepeatPenalty(2.0);
         requestBody.setRestart("");
         requestBody.setStart("");
