@@ -27,6 +27,8 @@ public class RiffusionService {
     private WebClient client;
     ExchangeStrategies exchangeStrategies;
 
+    public String audio;
+
 
     @PostConstruct
     private void init() {
@@ -46,15 +48,19 @@ public class RiffusionService {
         String prompt_b = "";
         switch (emotion) {
             case 0:
-                prompt_b = "upbeat and joyful melodies with a lively rhythm";
+                audio = "https://www.riffusion.com/riffs/ffb60db2-fde0-404e-9cb8-91732c65dc97";
+                prompt_b = "upbeat and joyful melodies with a lively rhythm, happy brass section, energetic percussion arrangements";
                 break;
             case 1:
-                prompt_b = "aggressive heavy metal with roaring guitars";
+                audio = "https://www.riffusion.com/riffs/20c2e191-6c9c-4b44-b702-0331aafa567b";
+                prompt_b = "aggressive heavy metal with roaring guitars, explosive drum rhythms, raging vocals with intense guitar solos";
                 break;
             case 2:
+                audio = "https://www.riffusion.com/riffs/3b60e0a4-0dde-4d6a-9541-e5a173ef2742";
                 prompt_b = "soulful violin melodies with emotive harmonies";
                 break;
             case 3:
+                audio = "https://www.riffusion.com/riffs/729a4ae8-02bf-4ed7-a015-09d22817415f";
                 prompt_b = "deep, smooth synthwave with a dream-like atmosphere";
                 break;
         }
@@ -145,7 +151,7 @@ public class RiffusionService {
     public String getAudioWithRetry(String prompt, int maxRetries, int emotion) {
         for (int retry = 0; retry < maxRetries; retry++) {
             try {
-                String audio = getAudio(prompt, emotion);
+                audio = getAudio(prompt, emotion);
                 return audio;
             } catch (Exception e) {
 
