@@ -48,19 +48,19 @@ public class RiffusionService {
         String prompt_b = "";
         switch (emotion) {
             case 0:
-                audio = "https://www.riffusion.com/riffs/ffb60db2-fde0-404e-9cb8-91732c65dc97";
+                audio = "src/main/resources/audio/emotion0.mp3";
                 prompt_b = "upbeat and joyful melodies with a lively rhythm, happy brass section, energetic percussion arrangements";
                 break;
             case 1:
-                audio = "https://www.riffusion.com/riffs/20c2e191-6c9c-4b44-b702-0331aafa567b";
+                audio = "src/main/resources/audio/emotion1.mp3";
                 prompt_b = "aggressive heavy metal with roaring guitars, explosive drum rhythms, raging vocals with intense guitar solos";
                 break;
             case 2:
-                audio = "https://www.riffusion.com/riffs/3b60e0a4-0dde-4d6a-9541-e5a173ef2742";
+                audio = "src/main/resources/audio/emotion2.mp3";
                 prompt_b = "soulful violin melodies with emotive harmonies";
                 break;
             case 3:
-                audio = "https://www.riffusion.com/riffs/729a4ae8-02bf-4ed7-a015-09d22817415f";
+                audio = "src/main/resources/audio/emotion3.mp3";
                 prompt_b = "deep, smooth synthwave with a dream-like atmosphere";
                 break;
         }
@@ -137,16 +137,16 @@ public class RiffusionService {
                     } else {
                         switch (emotion) {
                             case 0:
-                                audio = "https://www.riffusion.com/riffs/ffb60db2-fde0-404e-9cb8-91732c65dc97";
+                                audio = "src/main/resources/audio/emotion0.mp3";
                                 break;
                             case 1:
-                                audio = "https://www.riffusion.com/riffs/20c2e191-6c9c-4b44-b702-0331aafa567b";
+                                audio = "src/main/resources/audio/emotion1.mp3";
                                 break;
                             case 2:
-                                audio = "https://www.riffusion.com/riffs/3b60e0a4-0dde-4d6a-9541-e5a173ef2742";
+                                audio = "src/main/resources/audio/emotion2.mp3";
                                 break;
                             case 3:
-                                audio = "https://www.riffusion.com/riffs/729a4ae8-02bf-4ed7-a015-09d22817415f";
+                                audio = "src/main/resources/audio/emotion3.mp3";
                                 break;
                         }
                         return audio;
@@ -157,16 +157,16 @@ public class RiffusionService {
             } else {
                 switch (emotion) {
                     case 0:
-                        audio = "https://www.riffusion.com/riffs/ffb60db2-fde0-404e-9cb8-91732c65dc97";
+                        audio = "src/main/resources/audio/emotion0.mp3";
                         break;
                     case 1:
-                        audio = "https://www.riffusion.com/riffs/20c2e191-6c9c-4b44-b702-0331aafa567b";
+                        audio = "src/main/resources/audio/emotion1.mp3";
                         break;
                     case 2:
-                        audio = "https://www.riffusion.com/riffs/3b60e0a4-0dde-4d6a-9541-e5a173ef2742";
+                        audio = "src/main/resources/audio/emotion2.mp3";
                         break;
                     case 3:
-                        audio = "https://www.riffusion.com/riffs/729a4ae8-02bf-4ed7-a015-09d22817415f";
+                        audio = "src/main/resources/audio/emotion3.mp3";
                         break;
                 }
                 return audio;
