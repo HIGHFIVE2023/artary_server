@@ -135,13 +135,41 @@ public class RiffusionService {
                     if (audioResponseDto != null && audioResponseDto.getOutput() != null) {
                         return audioResponseDto.getOutput().getAudio();
                     } else {
-                        throw new RuntimeException("Failed to retrieve audio response");
+                        switch (emotion) {
+                            case 0:
+                                audio = "https://www.riffusion.com/riffs/ffb60db2-fde0-404e-9cb8-91732c65dc97";
+                                break;
+                            case 1:
+                                audio = "https://www.riffusion.com/riffs/20c2e191-6c9c-4b44-b702-0331aafa567b";
+                                break;
+                            case 2:
+                                audio = "https://www.riffusion.com/riffs/3b60e0a4-0dde-4d6a-9541-e5a173ef2742";
+                                break;
+                            case 3:
+                                audio = "https://www.riffusion.com/riffs/729a4ae8-02bf-4ed7-a015-09d22817415f";
+                                break;
+                        }
+                        return audio;
                     }
                 } catch (Exception e) {
                     throw new RuntimeException(e.getMessage());
                 }
             } else {
-                throw new RuntimeException("Invalid response received.");
+                switch (emotion) {
+                    case 0:
+                        audio = "https://www.riffusion.com/riffs/ffb60db2-fde0-404e-9cb8-91732c65dc97";
+                        break;
+                    case 1:
+                        audio = "https://www.riffusion.com/riffs/20c2e191-6c9c-4b44-b702-0331aafa567b";
+                        break;
+                    case 2:
+                        audio = "https://www.riffusion.com/riffs/3b60e0a4-0dde-4d6a-9541-e5a173ef2742";
+                        break;
+                    case 3:
+                        audio = "https://www.riffusion.com/riffs/729a4ae8-02bf-4ed7-a015-09d22817415f";
+                        break;
+                }
+                return audio;
             }
         } catch (WebClientResponseException e) {
             throw new RuntimeException(e.getMessage());
