@@ -40,5 +40,5 @@
 
 ## 📺 시연 영상
 
-https://youtu.be/wkBL1cFBlqE?feature=shared
+https://youtu.be/gMhGCzOWb9Q?feature=shared
 
